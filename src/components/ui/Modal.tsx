@@ -98,9 +98,11 @@ export function Modal({
                         </div>
                     </div>
                 </div>
-            </>
-        );
+            </div>
+        </>
+    );
 }
+
 
 
 
