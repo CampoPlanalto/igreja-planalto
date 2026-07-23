@@ -115,7 +115,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, BaseProps & React.Textar
 
 Textarea.displayName = 'Textarea';
 
-export const Select = forwardRef<HTMLSelectElement, BaseProps & { options?: { value: string; label: string }[] } & React.SelectHTMLAttributes<HTMLSelectElement>>(
+export const Select = forwardRef<HTMLSelectElement, BaseProps & { options?: { value: string; label: string }[]; placeholder?: string } & React.SelectHTMLAttributes<HTMLSelectElement>>(
     ({ className, label, error, hint, options, placeholder, ...props }, ref) => {
         return (
             <div className="w-full">
