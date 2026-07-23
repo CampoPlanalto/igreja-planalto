@@ -59,7 +59,7 @@ export const CardFooter = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivEleme
 
 CardFooter.displayName = 'CardFooter';
 
-export const Badge = forwardRef<HTMLSpanElement, HTMLAttributes<HTMLSpanElement>>(
+export const Badge = forwardRef<HTMLSpanElement, HTMLAttributes<HTMLSpanElement> & { variant?: 'primary' | 'success' | 'warning' | 'danger' | 'gold' | 'gray' }>(
     ({ className, variant = 'primary', ...props }, ref) => {
         const variants = {
             primary: 'badge-primary',
