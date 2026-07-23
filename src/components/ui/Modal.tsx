@@ -1,6 +1,6 @@
 'use client';
 
-import { Fragment, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from './Button';
@@ -45,7 +45,7 @@ export function Modal({
     };
 
     return (
-        <Fragment>
+        <>
             <div
                 className="fixed inset-0 z-50 overflow-y-auto"
                 role="dialog"
@@ -98,7 +98,7 @@ export function Modal({
                         </div>
                     </div>
                 </div>
-            </Fragment>
+            </>
         );
 }
 
