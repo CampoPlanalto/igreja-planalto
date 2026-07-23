@@ -202,7 +202,7 @@ export function QRCodeGenerator({
         try {
             const response = await fetch(qrCodeDataUrl);
             const blob = await response.blob();
-            await navigator.clipboard.writeItem(new ClipboardItem({ 'image/png': blob }));
+            await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
             alert('QR Code copiado para a área de transferência!');
         } catch {
             // Fallback: copy URL
