@@ -640,7 +640,6 @@ export function BatchQRCodeGenerator({
                                     <input
                                         type="checkbox"
                                         checked={selectedIds.length === campaigns.length && campaigns.length > 0}
-                                        indeterminate={selectedIds.length > 0 && selectedIds.length < campaigns.length}
                                         onChange={handleSelectAll}
                                         className="h-4 w-4 text-primary-600 rounded border-gray-300 focus:ring-primary-500"
                                     />
