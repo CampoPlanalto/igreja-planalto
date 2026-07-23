@@ -99,9 +99,8 @@ export function Modal({
                     </div>
                 </div>
             </Fragment>
-        );
-    );
 }
+
 
 interface ConfirmDialogProps {
     isOpen: boolean;
