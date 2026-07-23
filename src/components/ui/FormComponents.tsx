@@ -3,6 +3,8 @@
 import { forwardRef, useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 
+type BaseProps = { label?: string; error?: string; hint?: string };
+
 export const Button = forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement>>(
     ({ className, variant = 'primary', size = 'md', disabled, children, ...props }, ref) => {
         const baseStyles = 'inline-flex items-center justify-center font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
@@ -38,7 +40,7 @@ export const Button = forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<H
 
 Button.displayName = 'Button';
 
-export const Input = forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
+export const Input = forwardRef<HTMLInputElement, BaseProps & React.InputHTMLAttributes<HTMLInputElement>>(
     ({ className, type, label, error, hint, ...props }, ref) => {
         return (
             <div className="w-full">
@@ -76,7 +78,7 @@ export const Input = forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTML
 
 Input.displayName = 'Input';
 
-export const Textarea = forwardRef<HTMLTextAreaElement, React.TextareaHTMLAttributes<HTMLTextAreaElement>>(
+export const Textarea = forwardRef<HTMLTextAreaElement, BaseProps & React.TextareaHTMLAttributes<HTMLTextAreaElement>>(
     ({ className, label, error, hint, ...props }, ref) => {
         return (
             <div className="w-full">
@@ -113,7 +115,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, React.TextareaHTMLAttrib
 
 Textarea.displayName = 'Textarea';
 
-export const Select = forwardRef<HTMLSelectElement, React.SelectHTMLAttributes<HTMLSelectElement>>(
+export const Select = forwardRef<HTMLSelectElement, BaseProps & { options?: { value: string; label: string }[] } & React.SelectHTMLAttributes<HTMLSelectElement>>(
     ({ className, label, error, hint, options, placeholder, ...props }, ref) => {
         return (
             <div className="w-full">
@@ -161,7 +163,7 @@ export const Select = forwardRef<HTMLSelectElement, React.SelectHTMLAttributes<H
 
 Select.displayName = 'Select';
 
-export const Checkbox = forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
+export const Checkbox = forwardRef<HTMLInputElement, BaseProps & React.InputHTMLAttributes<HTMLInputElement>>(
     ({ className, label, ...props }, ref) => {
         return (
             <div className="flex items-start space-x-3">
@@ -193,7 +195,8 @@ export const RadioGroup = ({
     value, 
     onChange, 
     error, 
-    className 
+    className,
+    ...rest
 }: { 
     label: string;
     name: string;
@@ -202,6 +205,7 @@ export const RadioGroup = ({
     onChange: (value: string) => void;
     error?: string;
     className?: string;
+    [key: string]: unknown;
 }) => {
     return (
         <div className={cn('space-y-2', className)}>
