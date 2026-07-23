@@ -117,7 +117,7 @@ export default function ResponsesPage() {
     link.href = URL.createObjectURL(blob);
     link.download = `respostas-${new Date().toISOString().split('T')[0]}.csv`;
     link.click();
-    URL.revokeObjectURL(link);
+    URL.revokeObjectURL(link.href);
   }, [filteredResponses, allDataKeys]);
 
   const exportExcel = useCallback(() => {
@@ -140,7 +140,7 @@ export default function ResponsesPage() {
     link.href = URL.createObjectURL(blob);
     link.download = `respostas-${new Date().toISOString().split('T')[0]}.xls`;
     link.click();
-    URL.revokeObjectURL(link);
+    URL.revokeObjectURL(link.href);
   }, [filteredResponses, allDataKeys]);
 
   const viewDetails = (response: ResponseWithCampaign) => {

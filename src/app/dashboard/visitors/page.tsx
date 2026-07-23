@@ -138,7 +138,7 @@ export default function VisitorsPage() {
     link.href = URL.createObjectURL(blob);
     link.download = `visitantes-${new Date().toISOString().split('T')[0]}.csv`;
     link.click();
-    URL.revokeObjectURL(link);
+    URL.revokeObjectURL(link.href);
   }, [filteredVisitors]);
 
   if (loading) {
