@@ -99,7 +99,9 @@ export function Modal({
                     </div>
                 </div>
             </Fragment>
+        );
 }
+
 
 
 interface ConfirmDialogProps {

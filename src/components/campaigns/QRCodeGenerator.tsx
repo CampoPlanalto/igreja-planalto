@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/Button';
 import { Card, CardHeader, CardBody } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
 import { Modal } from '@/components/ui/Modal';
-import { Alert } from '@/components/ui/Alert';
+import { Alert } from '@/components/ui/FormComponents';
 import {
     Download,
     QrCode,
