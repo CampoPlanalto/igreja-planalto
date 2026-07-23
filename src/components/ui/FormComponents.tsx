@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 
 type BaseProps = { label?: string; error?: string; hint?: string };
 
-export const Button = forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement> & { variant?: string; size?: string }>(
+export const Button = forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement> & { variant?: 'primary' | 'secondary' | 'outline' | 'gold' | 'ghost' | 'danger'; size?: 'sm' | 'md' | 'lg' | 'xl' }>(
     ({ className, variant = 'primary', size = 'md', disabled, children, ...props }, ref) => {
         const baseStyles = 'inline-flex items-center justify-center font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
 
