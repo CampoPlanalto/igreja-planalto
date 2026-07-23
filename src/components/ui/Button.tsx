@@ -1,9 +1,15 @@
 'use client';
 
-import { forwardRef, type HTMLAttributes, type ButtonHTMLAttributes } from 'react';
+import { forwardRef, type ButtonHTMLAttributes } from 'react';
 import { cn } from '@/lib/utils';
 
-export const Button = forwardRef<HTMLButtonElement, ButtonHTMLAttributes<HTMLButtonElement>>(
+type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+    variant?: 'primary' | 'secondary' | 'outline' | 'gold' | 'ghost' | 'danger';
+    size?: 'sm' | 'md' | 'lg' | 'xl';
+    loading?: boolean;
+};
+
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     ({ className, variant = 'primary', size = 'md', disabled, loading, children, ...props }, ref) => {
         const variants = {
             primary: 'btn-primary',
