@@ -598,7 +598,7 @@ export default function DashboardPage() {
                                             </td>
                                             <td className="px-6 py-4 hidden md:table-cell">
                                                 <Badge variant={campaign.settings?.event_type === 'evangelism' ? 'gold' : 'primary'}>
-                                                    {campaign.settings?.event_type || 'Geral'}
+                                                    {(campaign.settings?.event_type as string) || 'Geral'}
                                                 </Badge>
                                             </td>
                                             <td className="px-6 py-4 hidden lg:table-cell">
