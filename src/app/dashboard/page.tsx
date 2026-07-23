@@ -698,8 +698,8 @@ export default function DashboardPage() {
             >
                 {selectedCampaign && (
                     <QRCodeGenerator
-                        campaign={selectedCampaign}
-                        baseUrl={`${window.location.origin}/c/${selectedCampaign.slug}`}
+                        url={`${window.location.origin}/c/${selectedCampaign.slug}`}
+                        title={selectedCampaign.title}
                     />
                 )}
             </Modal>
