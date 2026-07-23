@@ -246,7 +246,8 @@ export default function CampaignPage() {
             hint: field.help_text,
             required: field.required,
         };
-        const handleFieldChange = (val: string | string[] | boolean) => handleChange(field.id, val);
+        const handleFieldString = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
+            handleChange(field.id, e.target.value);
 
         switch (field.type) {
             case 'textarea':
@@ -256,7 +257,7 @@ export default function CampaignPage() {
                         placeholder={field.placeholder}
                         value={(value as string) || ''}
                         rows={3}
-                        onChange={handleFieldChange}
+                        onChange={handleFieldString}
                     />
                 );
 
@@ -267,7 +268,7 @@ export default function CampaignPage() {
                         placeholder={field.placeholder}
                         value={(value as string) || ''}
                         options={field.options?.map(opt => ({ value: opt, label: opt })) || []}
-                        onChange={handleFieldChange}
+                        onChange={handleFieldString}
                     />
                 );
 
@@ -299,7 +300,7 @@ export default function CampaignPage() {
                         name={field.id}
                         value={(value as string) || ''}
                         options={field.options?.map(opt => ({ value: opt, label: opt })) || []}
-                        onChange={handleFieldChange}
+                        onChange={(v: string) => handleChange(field.id, v)}
                     />
                 );
 
@@ -310,7 +311,7 @@ export default function CampaignPage() {
                         type="date"
                         value={(value as string) || ''}
                         placeholder={field.placeholder}
-                        onChange={handleFieldChange}
+                        onChange={handleFieldString}
                     />
                 );
 
@@ -335,7 +336,7 @@ export default function CampaignPage() {
                         type="email"
                         placeholder={field.placeholder || 'seu@email.com'}
                         value={(value as string) || ''}
-                        onChange={handleFieldChange}
+                        onChange={handleFieldString}
                     />
                 );
 
@@ -346,7 +347,7 @@ export default function CampaignPage() {
                         type="number"
                         placeholder={field.placeholder}
                         value={(value as string) || ''}
-                        onChange={handleFieldChange}
+                        onChange={handleFieldString}
                     />
                 );
 
@@ -357,7 +358,7 @@ export default function CampaignPage() {
                         type="text"
                         placeholder={field.placeholder}
                         value={(value as string) || ''}
-                        onChange={handleFieldChange}
+                        onChange={handleFieldString}
                     />
                 );
         }
