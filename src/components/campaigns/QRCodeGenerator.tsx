@@ -107,7 +107,7 @@ export function QRCodeGenerator({
 
     const compositeLogo = async (baseDataUrl: string) => {
         return new Promise<void>((resolve) => {
-            const img = new Image();
+            const img = new window.Image();
             img.onload = () => {
                 const canvas = canvasRef.current;
                 if (!canvas) return resolve();
