@@ -120,7 +120,7 @@ export function QRCodeGenerator({
                 ctx.drawImage(img, 0, 0, options.size, options.size);
 
                 // Draw logo in center
-                const logoImg = new Image();
+                const logoImg = new window.Image();
                 logoImg.onload = () => {
                     const logoSize = options.size * 0.2;
                     const x = (options.size - logoSize) / 2;
