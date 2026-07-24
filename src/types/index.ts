@@ -112,6 +112,8 @@ export type DashboardStats = {
   conversion_rate: number;
 };
 
+export type { FormResponse as Response };
+
 export type VisitorTrend = {
   date: string;
   count: number;
