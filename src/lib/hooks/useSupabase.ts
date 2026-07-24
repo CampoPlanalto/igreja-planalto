@@ -229,13 +229,13 @@ export function useDashboardStats(churchId?: string) {
                 .eq('church_id', churchId)
                 .eq('is_active', true);
 
+            const campaignIdsQuery = supabase.from('campaigns').select('id').eq('church_id', churchId) as any;
+
             // Total visitors
             const { count: totalVisitors } = await supabase
                 .from('responses')
                 .select('*', { count: 'exact', head: true })
-                .in('campaign_id', (
-                    supabase.from('campaigns').select('id').eq('church_id', churchId)
-                ));
+                .in('campaign_id', campaignIdsQuery);
 
             // Today's visitors
             const today = new Date();
@@ -243,9 +243,7 @@ export function useDashboardStats(churchId?: string) {
             const { count: visitorsToday } = await supabase
                 .from('responses')
                 .select('*', { count: 'exact', head: true })
-                .in('campaign_id', (
-                    supabase.from('campaigns').select('id').eq('church_id', churchId)
-                ))
+                .in('campaign_id', campaignIdsQuery)
                 .gte('created_at', today.toISOString());
 
             // This week
@@ -254,9 +252,7 @@ export function useDashboardStats(churchId?: string) {
             const { count: visitorsThisWeek } = await supabase
                 .from('responses')
                 .select('*', { count: 'exact', head: true })
-                .in('campaign_id', (
-                    supabase.from('campaigns').select('id').eq('church_id', churchId)
-                ))
+                .in('campaign_id', campaignIdsQuery)
                 .gte('created_at', weekAgo.toISOString());
 
             // This month
@@ -265,54 +261,42 @@ export function useDashboardStats(churchId?: string) {
             const { count: visitorsThisMonth } = await supabase
                 .from('responses')
                 .select('*', { count: 'exact', head: true })
-                .in('campaign_id', (
-                    supabase.from('campaigns').select('id').eq('church_id', churchId)
-                ))
+                .in('campaign_id', campaignIdsQuery)
                 .gte('created_at', monthAgo.toISOString());
 
             // Decisions for Christ
             const { count: decisions } = await supabase
                 .from('responses')
                 .select('*', { count: 'exact', head: true })
-                .in('campaign_id', (
-                    supabase.from('campaigns').select('id').eq('church_id', churchId)
-                ))
+                .in('campaign_id', campaignIdsQuery)
                 .contains('data', { 'Aceitei Jesus': true });
 
             // Prayer requests
             const { count: prayers } = await supabase
                 .from('responses')
                 .select('*', { count: 'exact', head: true })
-                .in('campaign_id', (
-                    supabase.from('campaigns').select('id').eq('church_id', churchId)
-                ))
+                .in('campaign_id', campaignIdsQuery)
                 .contains('data', { 'Tenho um pedido de oração': true });
 
             // Visits requested
             const { count: visits } = await supabase
                 .from('responses')
                 .select('*', { count: 'exact', head: true })
-                .in('campaign_id', (
-                    supabase.from('campaigns').select('id').eq('church_id', churchId)
-                ))
+                .in('campaign_id', campaignIdsQuery)
                 .contains('data', { 'Quero receber uma visita em casa': true });
 
             // Discipleship interest
             const { count: discipleship } = await supabase
                 .from('responses')
                 .select('*', { count: 'exact', head: true })
-                .in('campaign_id', (
-                    supabase.from('campaigns').select('id').eq('church_id', churchId)
-                ))
+                .in('campaign_id', campaignIdsQuery)
                 .contains('data', { 'Desejo participar de um pequeno grupo': true });
 
             // Membership interest
             const { count: membership } = await supabase
                 .from('responses')
                 .select('*', { count: 'exact', head: true })
-                .in('campaign_id', (
-                    supabase.from('campaigns').select('id').eq('church_id', churchId)
-                ))
+                .in('campaign_id', campaignIdsQuery)
                 .contains('data', { 'Tenho interesse em ser membro': true });
 
             setStats({
@@ -329,9 +313,7 @@ export function useDashboardStats(churchId?: string) {
             const { data: trendData } = await supabase
                 .from('responses')
                 .select('created_at')
-                .in('campaign_id', (
-                    supabase.from('campaigns').select('id').eq('church_id', churchId)
-                ))
+                .in('campaign_id', campaignIdsQuery)
                 .gte('created_at', new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString())
                 .order('created_at', { ascending: true });
 
