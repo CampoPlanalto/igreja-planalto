@@ -65,6 +65,7 @@ interface Campaign {
     is_active: boolean;
     is_public: boolean;
     settings: Record<string, unknown>;
+    church: { slug: string } | null;
     created_at: string;
     updated_at: string;
     _count?: {
