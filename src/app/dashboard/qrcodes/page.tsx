@@ -20,9 +20,10 @@ type CampaignItem = {
   title: string;
   slug: string;
   is_active: boolean;
+  church: { slug: string } | null;
 };
 
-const BASE_URL = 'https://igreja-planalto.onrender.com';
+const BASE_URL = 'https://igrejaplanalto.onrender.com';
 
 export default function QRCodesPage() {
   const supabase = createClient();
@@ -40,7 +41,7 @@ export default function QRCodesPage() {
     try {
       const { data } = await supabase
         .from('campaigns')
-        .select('id, title, slug, is_active')
+        .select('id, title, slug, is_active, church:churches!inner(slug)')
         .order('title');
 
       if (data) setCampaigns(data as CampaignItem[]);
@@ -82,7 +83,7 @@ export default function QRCodesPage() {
       .map((c) => ({
         id: c.id,
         title: c.title,
-        url: `${BASE_URL}/c/${c.slug}`,
+        url: `${BASE_URL}/c/${c.church?.slug || 'igreja'}/${c.slug}`,
         slug: c.slug,
       }));
   }, [campaigns, batchSelected]);
@@ -156,7 +157,7 @@ export default function QRCodesPage() {
                 </thead>
                 <tbody className="divide-y divide-gray-200">
                   {filteredCampaigns.map((campaign) => {
-                    const campaignUrl = `${BASE_URL}/c/${campaign.slug}`;
+                    const campaignUrl = `${BASE_URL}/c/${campaign.church?.slug || 'igreja'}/${campaign.slug}`;
                     const isSelected = batchSelected.includes(campaign.id);
                     return (
                       <tr key={campaign.id} className={cn('hover:bg-gray-50', isSelected && 'bg-primary-50/50')}>
@@ -218,7 +219,7 @@ export default function QRCodesPage() {
       >
         {selectedCampaign && (
           <QRCodeGenerator
-            url={`${BASE_URL}/c/${selectedCampaign.slug}`}
+            url={`${BASE_URL}/c/${selectedCampaign.church?.slug || 'igreja'}/${selectedCampaign.slug}`}
             title={selectedCampaign.title}
           />
         )}

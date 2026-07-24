@@ -137,7 +137,7 @@ export default function DashboardPage() {
             // Fetch stats
             const { data: campaignsData } = await supabase
                 .from('campaigns')
-                .select('*, responses(count)')
+                .select('*, church:churches!inner(slug), responses(count)')
                 .order('created_at', { ascending: false });
 
             if (campaignsData) {
@@ -698,7 +698,7 @@ export default function DashboardPage() {
             >
                 {selectedCampaign && (
                     <QRCodeGenerator
-                        url={`${window.location.origin}/c/${selectedCampaign.slug}`}
+                        url={`${window.location.origin}/c/${selectedCampaign.church?.slug}/${selectedCampaign.slug}`}
                         title={selectedCampaign.title}
                     />
                 )}
