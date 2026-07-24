@@ -66,7 +66,7 @@ interface FormData {
     [key: string]: string | string[] | boolean;
 }
 
-export default function CampaignForm({ churchSlug, campaignSlug }: { churchSlug?: string; campaignSlug?: string; slug?: string }) {
+export default function CampaignForm({ churchSlug, campaignSlug }: { churchSlug?: string; campaignSlug?: string }) {
     const [campaign, setCampaign] = useState<Campaign | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -97,7 +97,7 @@ export default function CampaignForm({ churchSlug, campaignSlug }: { churchSlug?
                     }
                     query = query.eq('church_id', church.id).eq('slug', campaignSlug);
                 } else {
-                    query = query.eq('slug', campaignSlug || slug || '');
+                    query = query.eq('slug', campaignSlug || '');
                 }
 
                 query = query.eq('is_active', true).eq('is_public', true);
@@ -137,7 +137,7 @@ export default function CampaignForm({ churchSlug, campaignSlug }: { churchSlug?
         fetchCampaign();
 
         return () => { cancelled = true; };
-    }, [churchSlug, campaignSlug, slug]);
+    }, [churchSlug, campaignSlug]);
 
     const validateField = (field: CampaignField, value: string | string[] | boolean): string | null => {
         if (field.required) {
