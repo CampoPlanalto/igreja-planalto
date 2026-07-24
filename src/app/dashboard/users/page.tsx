@@ -88,19 +88,31 @@ export default function UsersPage() {
     const fetchUsers = async () => {
         try {
             setLoading(true);
-            const { data, error } = await supabase
+            const { data: roles, error } = await supabase
                 .from('user_roles')
-                .select('user_id, role, created_at, users:user_id(id, email, raw_user_meta_data)');
+                .select('user_id, role, created_at');
 
             if (error) throw error;
 
-            const mapped: UserWithRole[] = (data || []).map((item: any) => ({
-                user_id: item.user_id,
-                role: item.role,
-                email: item.users?.email ?? null,
-                name: item.users?.raw_user_meta_data?.full_name ?? null,
-                created_at: item.created_at ?? null,
-            }));
+            const userIds = (roles || []).map(r => r.user_id);
+
+            const { data: profiles } = await supabase
+                .from('profiles')
+                .select('id, email, name')
+                .in('id', userIds);
+
+            const profileMap = new Map((profiles || []).map(p => [p.id, p]));
+
+            const mapped: UserWithRole[] = (roles || []).map((item) => {
+                const profile = profileMap.get(item.user_id);
+                return {
+                    user_id: item.user_id,
+                    role: item.role,
+                    email: profile?.email ?? null,
+                    name: profile?.name ?? null,
+                    created_at: item.created_at ?? null,
+                };
+            });
 
             setUsers(mapped);
         } catch (err: any) {
