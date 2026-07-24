@@ -37,10 +37,10 @@ export default function ResetPasswordPage() {
 
   if (sent) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-12">
+      <div className="min-h-screen flex items-center justify-center bg-primary-50 px-4 py-12">
         <div className="w-full max-w-md text-center">
-          <div className="inline-flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-4">
-            <CheckCircle className="h-8 w-8 text-green-600" />
+          <div className="inline-flex items-center justify-center h-16 w-16 rounded-full bg-primary-100 mb-4">
+            <CheckCircle className="h-8 w-8 text-primary-600" />
           </div>
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Email enviado!</h1>
           <p className="text-gray-600 mb-6">
@@ -56,7 +56,7 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-12">
+    <div className="min-h-screen flex items-center justify-center bg-primary-50 px-4 py-12">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center h-16 w-16 rounded-full bg-primary-100 mb-4">
@@ -75,7 +75,7 @@ export default function ResetPasswordPage() {
 
             <form onSubmit={handleSubmit} className="space-y-4">
               {error && (
-                <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700" role="alert">
+                <div className="p-3 bg-primary-50 border border-primary-200 rounded-lg text-sm text-primary-700" role="alert">
                   {error}
                 </div>
               )}

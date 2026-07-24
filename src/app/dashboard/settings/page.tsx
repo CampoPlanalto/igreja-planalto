@@ -340,7 +340,7 @@ export default function SettingsPage() {
             {alert && (
                 <div className={cn(
                     'mb-6 p-4 rounded-lg flex items-center gap-3 text-sm font-medium',
-                    alert.type === 'success' ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-red-50 text-red-800 border border-red-200'
+                    alert.type === 'success' ? 'bg-primary-50 text-primary-800 border border-primary-200' : 'bg-primary-50 text-primary-800 border border-primary-200'
                 )}>
                     {alert.type === 'success' ? <CheckCircle className="h-5 w-5 flex-shrink-0" /> : <AlertCircle className="h-5 w-5 flex-shrink-0" />}
                     {alert.message}

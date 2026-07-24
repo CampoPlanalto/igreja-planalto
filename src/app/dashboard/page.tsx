@@ -419,11 +419,11 @@ export default function DashboardPage() {
                                     .reverse()}
                                 layout="vertical"
                             >
-                                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+                                <CartesianGrid strokeDasharray="3 3" stroke="#e5dcc8" vertical={false} />
                                 <XAxis
                                     type="number"
                                     tick={{ fill: '#9ca3af', fontSize: 11 }}
-                                    axisLine={{ stroke: '#e5e7eb' }}
+                                    axisLine={{ stroke: '#e5dcc8' }}
                                     tickFormatter={formatNumber}
                                 />
                                 <YAxis
@@ -436,8 +436,8 @@ export default function DashboardPage() {
                                 <Tooltip
                                     formatter={(value: number) => [formatNumber(value), 'Visitantes']}
                                     contentStyle={{
-                                        backgroundColor: '#fff',
-                                        border: '1px solid #e5e7eb',
+                                        backgroundColor: '#FFF8F0',
+                                        border: '1px solid #e5dcc8',
                                         borderRadius: '8px',
                                     }}
                                 />
@@ -755,7 +755,7 @@ function StatCard({
                         <p className="text-sm font-medium text-gray-500">{title}</p>
                         <p className="text-3xl font-bold text-gray-900 mt-1">{value}</p>
                         {trend && (
-                            <div className="flex items-center mt-2 text-sm text-green-600">
+                            <div className="flex items-center mt-2 text-sm text-primary-600">
                                 <TrendIcon className="h-4 w-4 mr-1" />
                                 <span className="font-medium">{trend}</span>
                             </div>

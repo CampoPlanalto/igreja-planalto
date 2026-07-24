@@ -152,11 +152,11 @@ export default function EditCampaignPage() {
                 end_date: campaign.end_date ? campaign.end_date.split('T')[0] : '',
                 is_active: campaign.is_active ?? true,
                 is_public: campaign.is_public ?? true,
-                event_type: settings.event_type || 'geral',
-                thank_you_message: settings.thank_you_message || 'Obrigado por preencher!',
-                redirect_url: settings.redirect_url || '',
-                show_visitor_count: settings.show_visitor_count ?? true,
-                allow_anonymous: settings.allow_anonymous ?? false,
+                event_type: (settings.event_type as string) || 'geral',
+                thank_you_message: (settings.thank_you_message as string) || 'Obrigado por preencher!',
+                redirect_url: (settings.redirect_url as string) || '',
+                show_visitor_count: (settings.show_visitor_count as boolean) ?? true,
+                allow_anonymous: (settings.allow_anonymous as boolean) ?? false,
             });
 
             const customFields = (settings.custom_fields as CampaignField[]) || [];
@@ -565,7 +565,7 @@ export default function EditCampaignPage() {
                                                 {field.label}
                                             </span>
                                             {field.required && (
-                                                <span className="text-red-500 text-sm">*</span>
+                                                <span className="text-primary-500 text-sm">*</span>
                                             )}
                                         </div>
                                         <div className="flex items-center gap-2 mt-1">

@@ -321,7 +321,7 @@ export default function CampaignPage() {
                             <p className="text-sm text-gray-500">{field.help_text}</p>
                         )}
                         {fieldError && (
-                            <p className="text-sm text-red-600" role="alert">{fieldError}</p>
+                            <p className="text-sm text-primary-600" role="alert">{fieldError}</p>
                         )}
                     </div>
                 );
@@ -402,10 +402,10 @@ export default function CampaignPage() {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-gray-50">
+            <div className="min-h-screen bg-primary-50">
                 <div className="w-full h-64 md:h-80 skeleton" />
                 <div className="max-w-3xl mx-auto px-4 py-8 md:py-12 -mt-6 md:-mt-10 relative z-10">
-                    <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+                    <div className="rounded-xl border border-primary-100 bg-white p-6 shadow-sm">
                         <div className="skeleton h-8 w-64 mb-4" />
                         <div className="skeleton h-4 w-48 mb-8" />
                         {[1, 2, 3, 4].map(i => (
@@ -422,10 +422,10 @@ export default function CampaignPage() {
 
     if (error || !campaign) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+            <div className="min-h-screen flex items-center justify-center bg-primary-50 px-4">
                 <div className="text-center max-w-md animate-fade-in-up">
-                    <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-red-100">
-                        <AlertCircle className="h-10 w-10 text-red-500" />
+                    <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-primary-100">
+                        <AlertCircle className="h-10 w-10 text-primary-500" />
                     </div>
                     <h1 className="text-2xl font-bold text-gray-900 mb-2">Campanha não encontrada</h1>
                     <p className="text-gray-600 mb-8">
@@ -454,7 +454,7 @@ export default function CampaignPage() {
     });
 
     return (
-        <div className={cn('min-h-screen bg-gray-50')}>
+        <div className={cn('min-h-screen bg-primary-50')}>
             <div className="relative">
                 {campaign.banner_url ? (
                     <img
@@ -512,8 +512,8 @@ export default function CampaignPage() {
                     <CardBody>
                         {showSuccess || submitted ? (
                             <div className="text-center py-12 animate-fade-in-up">
-                                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
-                                    <CheckCircle className="h-8 w-8 text-green-600" />
+                                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary-100">
+                                    <CheckCircle className="h-8 w-8 text-primary-600" />
                                 </div>
                                 <h3 className="text-2xl font-bold text-gray-900 mb-2">
                                     {campaign.settings?.thank_you_message ?? 'Obrigado por preencher!'}
@@ -526,7 +526,7 @@ export default function CampaignPage() {
                         ) : (
                             <form onSubmit={handleSubmit} className="space-y-6" noValidate>
                                 {errors.submit && (
-                                    <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700" role="alert">
+                                    <div className="p-4 bg-primary-50 border border-primary-200 rounded-lg text-primary-700" role="alert">
                                         {errors.submit}
                                     </div>
                                 )}
@@ -563,8 +563,8 @@ export default function CampaignPage() {
                 size="sm"
             >
                 <div className="text-center">
-                    <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
-                        <CheckCircle className="h-8 w-8 text-green-600" />
+                    <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary-100">
+                        <CheckCircle className="h-8 w-8 text-primary-600" />
                     </div>
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">
                         {campaign.settings?.thank_you_message ?? 'Obrigado por preencher!'}
@@ -582,7 +582,7 @@ export default function CampaignPage() {
                 href="https://wa.me/5561999999999?text=Olá! Tenho dúvidas sobre a campanha."
                 target="_blank"
                 rel="noopener noreferrer"
-                className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-green-500 text-white shadow-lg hover:bg-green-600 transition-colors animate-fade-in-up"
+                className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-primary-600 text-white shadow-lg hover:bg-primary-700 transition-colors animate-fade-in-up"
                 aria-label="Fale conosco pelo WhatsApp"
             >
                 <MessageCircle className="h-7 w-7" />
