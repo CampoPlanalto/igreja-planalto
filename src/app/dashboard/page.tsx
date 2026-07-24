@@ -65,7 +65,7 @@ interface Campaign {
     is_active: boolean;
     is_public: boolean;
     settings: Record<string, unknown>;
-    church: { slug: string } | null;
+    church: { slug: string }[] | null;
     created_at: string;
     updated_at: string;
     _count?: {
@@ -699,7 +699,7 @@ export default function DashboardPage() {
             >
                 {selectedCampaign && (
                     <QRCodeGenerator
-                        url={`${window.location.origin}/c/${selectedCampaign.church?.slug}/${selectedCampaign.slug}`}
+                        url={`${window.location.origin}/c/${selectedCampaign.church?.[0]?.slug}/${selectedCampaign.slug}`}
                         title={selectedCampaign.title}
                     />
                 )}
