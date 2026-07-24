@@ -41,7 +41,7 @@ export default function AuthCallbackPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-primary-50">
         <div className="text-center max-w-md mx-auto px-4">
-          <AlertCircle className="h-16 w-16 text-red-500 mx-auto mb-4" />
+          <AlertCircle className="h-16 w-16 text-primary-500 mx-auto mb-4" />
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Erro na autenticação</h1>
           <p className="text-gray-600 mb-6">{error}</p>
           <button

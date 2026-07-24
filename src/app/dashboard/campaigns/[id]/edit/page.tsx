@@ -655,7 +655,7 @@ export default function EditCampaignPage() {
                                 </Button>
                             </div>
                             {fieldErrors.options && (
-                                <p className="text-sm text-red-600">{fieldErrors.options}</p>
+                                <p className="text-sm text-primary-600">{fieldErrors.options}</p>
                             )}
                             <div className="space-y-2">
                                 {fieldForm.options.map((option, idx) => (

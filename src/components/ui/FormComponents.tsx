@@ -54,7 +54,7 @@ export const Input = forwardRef<HTMLInputElement, BaseProps & React.InputHTMLAtt
                     type={type}
                     className={cn(
                         'input',
-                        error && 'border-red-500 focus:ring-red-500',
+                        error && 'border-primary-500 focus:ring-primary-500',
                         className
                     )}
                     aria-invalid={error ? 'true' : 'false'}
@@ -62,7 +62,7 @@ export const Input = forwardRef<HTMLInputElement, BaseProps & React.InputHTMLAtt
                     {...props}
                 />
                 {error && (
-                    <p id={`${props.id}-error`} className="mt-1 text-sm text-red-600" role="alert">
+                    <p id={`${props.id}-error`} className="mt-1 text-sm text-primary-600" role="alert">
                         {error}
                     </p>
                 )}
@@ -91,7 +91,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, BaseProps & React.Textar
                     ref={ref}
                     className={cn(
                         'input min-h-[100px] resize-y',
-                        error && 'border-red-500 focus:ring-red-500',
+                        error && 'border-primary-500 focus:ring-primary-500',
                         className
                     )}
                     aria-invalid={error ? 'true' : 'false'}
@@ -99,7 +99,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, BaseProps & React.Textar
                     {...props}
                 />
                 {error && (
-                    <p id={`${props.id}-error`} className="mt-1 text-sm text-red-600" role="alert">
+                    <p id={`${props.id}-error`} className="mt-1 text-sm text-primary-600" role="alert">
                         {error}
                     </p>
                 )}
@@ -128,7 +128,7 @@ export const Select = forwardRef<HTMLSelectElement, BaseProps & { options?: { va
                     ref={ref}
                     className={cn(
                         'input',
-                        error && 'border-red-500 focus:ring-red-500',
+                        error && 'border-primary-500 focus:ring-primary-500',
                         className
                     )}
                     aria-invalid={error ? 'true' : 'false'}
@@ -147,7 +147,7 @@ export const Select = forwardRef<HTMLSelectElement, BaseProps & { options?: { va
                     ))}
                 </select>
                 {error && (
-                    <p id={`${props.id}-error`} className="mt-1 text-sm text-red-600" role="alert">
+                    <p id={`${props.id}-error`} className="mt-1 text-sm text-primary-600" role="alert">
                         {error}
                     </p>
                 )}
@@ -225,7 +225,7 @@ export const RadioGroup = ({
                     </label>
                 ))}
             </div>
-            {error && <p className="text-sm text-red-600" role="alert">{error}</p>}
+            {error && <p className="text-sm text-primary-600" role="alert">{error}</p>}
         </div>
     );
 };
@@ -298,10 +298,10 @@ export const Alert = ({
     onClose?: () => void;
 }) => {
     const variants = {
-        info: 'bg-blue-50 border-blue-200 text-blue-800',
-        success: 'bg-green-50 border-green-200 text-green-800',
-        warning: 'bg-yellow-50 border-yellow-200 text-yellow-800',
-        danger: 'bg-red-50 border-red-200 text-red-800',
+        info: 'bg-primary-50 border-primary-200 text-primary-800',
+        success: 'bg-primary-50 border-primary-200 text-primary-800',
+        warning: 'bg-primary-50 border-primary-200 text-primary-800',
+        danger: 'bg-primary-50 border-primary-200 text-primary-800',
     };
 
     return (
