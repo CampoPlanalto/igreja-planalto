@@ -132,7 +132,7 @@ export default function SettingsPage() {
                 setFormFacebook(social.facebook || '');
                 setFormInstagram(social.instagram || '');
                 setFormYoutube(social.youtube || '');
-                setFormWhatsapp(social.whatsapp || '');
+                setFormWhatsapp(churchData.whatsapp || social.whatsapp || '');
 
                 setFormPrimaryColor(churchData.primary_color || '#C29560');
                 setFormSecondaryColor(churchData.secondary_color || '#D4A86A');
@@ -227,6 +227,7 @@ export default function SettingsPage() {
             youtube: formYoutube || undefined,
             whatsapp: formWhatsapp || undefined,
         },
+        whatsapp: formWhatsapp || null,
     });
 
     const handleSaveColors = () => saveChurch('colors', {

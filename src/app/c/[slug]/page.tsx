@@ -24,6 +24,19 @@ interface CampaignField {
     conditional_logic?: Record<string, unknown>;
 }
 
+interface Church {
+    id: string;
+    name: string;
+    slug: string;
+    whatsapp: string | null;
+    phone: string | null;
+    email: string | null;
+    address: string | null;
+    primary_color: string;
+    secondary_color: string;
+    logo_url: string | null;
+}
+
 interface Campaign {
     id: string;
     church_id: string;
@@ -36,6 +49,7 @@ interface Campaign {
     is_active: boolean;
     is_public: boolean;
     qr_code_url: string | null;
+    church: Church;
     settings?: {
         show_visitor_count?: boolean;
         allow_anonymous?: boolean;
@@ -82,7 +96,7 @@ export default function CampaignPage() {
 
                 const { data, error: fetchError } = await supabase
                     .from('campaigns')
-                    .select('*')
+                    .select('*, church:churches!inner(*)')
                     .eq('slug', slug)
                     .eq('is_active', true)
                     .eq('is_public', true)
@@ -578,15 +592,22 @@ export default function CampaignPage() {
                 </div>
             </Modal>
 
-            <a
-                href="https://wa.me/5561999999999?text=Olá! Tenho dúvidas sobre a campanha."
-                target="_blank"
-                rel="noopener noreferrer"
-                className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-primary-600 text-white shadow-lg hover:bg-primary-700 transition-colors animate-fade-in-up"
-                aria-label="Fale conosco pelo WhatsApp"
-            >
-                <MessageCircle className="h-7 w-7" />
-            </a>
+            {(() => {
+                const whatsappNumber = campaign.church?.whatsapp || campaign.church?.phone || '';
+                const cleanNumber = whatsappNumber.replace(/\D/g, '');
+                if (!cleanNumber) return null;
+                return (
+                    <a
+                        href={`https://wa.me/${cleanNumber}?text=Olá! Tenho dúvidas sobre a campanha.`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-primary-600 text-white shadow-lg hover:bg-primary-700 transition-colors animate-fade-in-up"
+                        aria-label="Fale conosco pelo WhatsApp"
+                    >
+                        <MessageCircle className="h-7 w-7" />
+                    </a>
+                );
+            })()}
         </div>
     );
 }

@@ -21,6 +21,7 @@ export interface Database {
                     secondary_color: string;
                     address: string | null;
                     phone: string | null;
+                    whatsapp: string | null;
                     email: string | null;
                     website: string | null;
                     social_links: Json | null;
@@ -39,6 +40,7 @@ export interface Database {
                     secondary_color?: string;
                     address?: string | null;
                     phone?: string | null;
+                    whatsapp?: string | null;
                     email?: string | null;
                     website?: string | null;
                     social_links?: Json | null;
@@ -57,6 +59,7 @@ export interface Database {
                     secondary_color?: string;
                     address?: string | null;
                     phone?: string | null;
+                    whatsapp?: string | null;
                     email?: string | null;
                     website?: string | null;
                     social_links?: Json | null;

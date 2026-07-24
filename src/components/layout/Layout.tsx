@@ -204,7 +204,7 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
             <main>{children}</main>
             <footer className="bg-primary-100 border-t border-[#e5dcc8] py-8">
                 <div className="container-custom text-center text-sm text-gray-500">
-                    <p>Igreja Campo do Planalto - Vila Planalto</p>
+                    <p>{process.env.NEXT_PUBLIC_CHURCH_NAME || 'Igreja Campo do Planalto'}{process.env.NEXT_PUBLIC_CHURCH_CITY ? ` - ${process.env.NEXT_PUBLIC_CHURCH_CITY}` : ''}</p>
                 </div>
             </footer>
         </div>
