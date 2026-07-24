@@ -41,10 +41,10 @@ export default function HomePage() {
               Igreja Campo do Planalto
             </h1>
             <p className="text-xl sm:text-2xl text-primary-100 font-light mb-2">
-              Vila Planalto
+              Laranjal do Jari - AP
             </p>
             <p className="text-lg text-primary-200 mb-10 max-w-xl mx-auto">
-              Uma igreja acolhedora para toda a família. Venha nos visitar e fazer parte da nossa história.
+              Assembleia de Deus - Uma igreja acolhedora para toda a família. Venha nos visitar e fazer parte da nossa história.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -86,8 +86,8 @@ export default function HomePage() {
             </div>
             <h3 className="text-lg font-semibold text-gray-900 mb-2">Localização</h3>
             <p className="text-gray-600">
-              Vila Planalto<br />
-              Anápolis - GO
+              Laranjal do Jari - AP<br />
+              Amazônia
             </p>
           </div>
           <div className="text-center p-6">
@@ -106,7 +106,7 @@ export default function HomePage() {
       {/* Footer */}
       <footer className="bg-gray-100 border-t border-gray-200 py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm text-gray-500">
-          <p>Igreja Campo do Planalto - Vila Planalto</p>
+          <p>Igreja Campo do Planalto - Laranjal do Jari - AP</p>
         </div>
       </footer>
     </div>
