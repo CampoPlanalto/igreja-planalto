@@ -306,7 +306,7 @@ export function useDashboardStats(churchId?: string) {
                 visitors_today: visitorsToday || 0,
                 visitors_this_week: visitorsThisWeek || 0,
                 visitors_this_month: visitorsThisMonth || 0,
-                conversion_rate: totalVisitors ? Math.round((decisions / totalVisitors) * 100) : 0,
+                conversion_rate: totalVisitors ? Math.round(((decisions || 0) / totalVisitors) * 100) : 0,
             });
 
             // Fetch trends for last 30 days
