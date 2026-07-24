@@ -289,7 +289,7 @@ export default function DashboardPage() {
     }
 
     // Color palette for charts
-    const COLORS = ['#0ea5e9', '#22c55e', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
+    const COLORS = ['#C29560', '#D4A86A', '#E8C08A', '#A67D4D', '#F5D5A8', '#866540'];
 
     return (
         <>
@@ -313,7 +313,7 @@ export default function DashboardPage() {
                     title="Total de Campanhas"
                     value={stats?.total_campaigns || 0}
                     icon={FileText}
-                    color="bg-primary-100 text-primary-600"
+                    color="bg-primary-100 text-primary-700"
                     trend={`${stats?.active_campaigns || 0} ativas`}
                     trendIcon={CheckCircle}
                 />
@@ -321,7 +321,7 @@ export default function DashboardPage() {
                     title="Total de Visitantes"
                     value={formatNumber(stats?.total_visitors || 0)}
                     icon={UsersIcon}
-                    color="bg-green-100 text-green-600"
+                    color="bg-primary-100 text-primary-700"
                     trend={`+${stats?.visitors_today || 0} hoje`}
                     trendIcon={TrendingUp}
                 />
@@ -329,7 +329,7 @@ export default function DashboardPage() {
                     title="Decisões por Cristo"
                     value={formatNumber(stats?.decisions_for_christ || 0)}
                     icon={Heart}
-                    color="bg-red-100 text-red-600"
+                    color="bg-primary-50 text-primary-600"
                     trend={`${stats?.conversion_rate || 0}% conversão`}
                     trendIcon={TrendingUp}
                 />
@@ -337,7 +337,7 @@ export default function DashboardPage() {
                     title="Pedidos de Oração"
                     value={formatNumber(stats?.prayer_requests || 0)}
                     icon={AlertCircle}
-                    color="bg-yellow-100 text-yellow-600"
+                    color="bg-primary-50 text-primary-600"
                     trend={`${stats?.visits_requested || 0} visitas solicitadas`}
                     trendIcon={MapPin}
                 />
@@ -360,29 +360,29 @@ export default function DashboardPage() {
                             <AreaChart data={trends}>
                                 <defs>
                                     <linearGradient id="colorVisitors" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="5%" stopColor="#0ea5e9" stopOpacity={0.3} />
-                                        <stop offset="95%" stopColor="#0ea5e9" stopOpacity={0} />
+                                        <stop offset="5%" stopColor="#C29560" stopOpacity={0.3} />
+                                        <stop offset="95%" stopColor="#C29560" stopOpacity={0} />
                                     </linearGradient>
                                 </defs>
-                                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                                <CartesianGrid strokeDasharray="3 3" stroke="#e5dcc8" />
                                 <XAxis
                                     dataKey="date"
                                     tickFormatter={date => formatDate(date, { month: 'short', day: 'numeric' })}
                                     tick={{ fill: '#9ca3af', fontSize: 11 }}
-                                    axisLine={{ stroke: '#e5e7eb' }}
+                                    axisLine={{ stroke: '#e5dcc8' }}
                                     interval="preserveStartEnd"
                                 />
                                 <YAxis
                                     tick={{ fill: '#9ca3af', fontSize: 11 }}
-                                    axisLine={{ stroke: '#e5e7eb' }}
+                                    axisLine={{ stroke: '#e5dcc8' }}
                                     tickFormatter={formatNumber}
                                 />
                                 <Tooltip
                                     formatter={(value: number) => [formatNumber(value), 'Visitantes']}
                                     labelFormatter={date => formatDate(date, { weekday: 'short', day: 'numeric', month: 'short' })}
                                     contentStyle={{
-                                        backgroundColor: '#fff',
-                                        border: '1px solid #e5e7eb',
+                                        backgroundColor: '#FFF8F0',
+                                        border: '1px solid #e5dcc8',
                                         borderRadius: '8px',
                                         boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
                                     }}
@@ -390,7 +390,7 @@ export default function DashboardPage() {
                                 <Area
                                     type="monotone"
                                     dataKey="count"
-                                    stroke="#0ea5e9"
+                                    stroke="#C29560"
                                     strokeWidth={2}
                                     fillOpacity={1}
                                     fill="url(#colorVisitors)"
@@ -441,7 +441,7 @@ export default function DashboardPage() {
                                         borderRadius: '8px',
                                     }}
                                 />
-                                <Bar dataKey="visitantes" fill="#0ea5e9" radius={[0, 4, 4, 0]} maxBarSize={30} />
+                                <Bar dataKey="visitantes" fill="#C29560" radius={[0, 4, 4, 0]} maxBarSize={30} />
                             </BarChart>
                         </ResponsiveContainer>
                     </CardBody>
@@ -461,19 +461,19 @@ export default function DashboardPage() {
                             <span>Criar Nova Campanha</span>
                         </Button>
                         <Button variant="outline" className="w-full justify-start gap-3" onClick={() => router.push('/dashboard/qrcodes')}>
-                            <QrCode className="h-5 w-5 text-green-600" />
+                            <QrCode className="h-5 w-5 text-primary-600" />
                             <span>Gerenciar QR Codes</span>
                         </Button>
                         <Button variant="outline" className="w-full justify-start gap-3" onClick={() => router.push('/dashboard/visitors')}>
-                            <UsersIcon className="h-5 w-5 text-blue-600" />
+                            <UsersIcon className="h-5 w-5 text-primary-600" />
                             <span>Ver Todos os Visitantes</span>
                         </Button>
                         <Button variant="outline" className="w-full justify-start gap-3" onClick={() => router.push('/dashboard/responses')}>
-                            <Download className="h-5 w-5 text-purple-600" />
+                            <Download className="h-5 w-5 text-primary-600" />
                             <span>Exportar Respostas</span>
                         </Button>
                         <Button variant="outline" className="w-full justify-start gap-3" onClick={() => router.push('/dashboard/settings')}>
-                            <Settings className="h-5 w-5 text-gray-600" />
+                            <Settings className="h-5 w-5 text-primary-600" />
                             <span>Configurações da Igreja</span>
                         </Button>
                     </CardBody>

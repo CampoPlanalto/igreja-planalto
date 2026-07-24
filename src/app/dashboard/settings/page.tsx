@@ -81,8 +81,8 @@ export default function SettingsPage() {
     const [formYoutube, setFormYoutube] = useState('');
     const [formWhatsapp, setFormWhatsapp] = useState('');
 
-    const [formPrimaryColor, setFormPrimaryColor] = useState('#0ea5e9');
-    const [formSecondaryColor, setFormSecondaryColor] = useState('#22c55e');
+    const [formPrimaryColor, setFormPrimaryColor] = useState('#C29560');
+    const [formSecondaryColor, setFormSecondaryColor] = useState('#D4A86A');
 
     const [formAllowRegistration, setFormAllowRegistration] = useState(true);
     const [formRequireApproval, setFormRequireApproval] = useState(true);
@@ -134,8 +134,8 @@ export default function SettingsPage() {
                 setFormYoutube(social.youtube || '');
                 setFormWhatsapp(social.whatsapp || '');
 
-                setFormPrimaryColor(churchData.primary_color || '#0ea5e9');
-                setFormSecondaryColor(churchData.secondary_color || '#22c55e');
+                setFormPrimaryColor(churchData.primary_color || '#C29560');
+                setFormSecondaryColor(churchData.secondary_color || '#D4A86A');
 
                 const settings = (churchData.settings || {}) as Record<string, unknown>;
                 setFormAllowRegistration((settings.allow_registration as boolean) ?? true);
@@ -564,7 +564,7 @@ export default function SettingsPage() {
                                     <Input
                                         value={formPrimaryColor}
                                         onChange={e => setFormPrimaryColor(e.target.value)}
-                                        placeholder="#0ea5e9"
+                                        placeholder="#C29560"
                                         className="font-mono"
                                     />
                                 </div>
@@ -583,7 +583,7 @@ export default function SettingsPage() {
                                     <Input
                                         value={formSecondaryColor}
                                         onChange={e => setFormSecondaryColor(e.target.value)}
-                                        placeholder="#22c55e"
+                                        placeholder="#D4A86A"
                                         className="font-mono"
                                     />
                                 </div>

@@ -9,21 +9,21 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          50: '#f0f9ff',
-          100: '#e0f2fe',
-          200: '#bae6fd',
-          300: '#7dd3fc',
-          400: '#38bdf8',
-          500: '#0ea5e9',
-          600: '#0284c7',
-          700: '#0369a1',
-          800: '#075985',
-          900: '#0c4a6e',
+          50: '#FFF8F0',
+          100: '#FDF2E3',
+          200: '#FBE5C7',
+          300: '#F5D5A8',
+          400: '#E8C08A',
+          500: '#D4A86A',
+          600: '#C29560',
+          700: '#A67D4D',
+          800: '#866540',
+          900: '#6B4F32',
         },
         church: {
-          gold: '#d4a843',
-          goldLight: '#f0e4c8',
-          dark: '#1a1a2e',
+          gold: '#C2A878',
+          goldLight: '#F5EDE0',
+          dark: '#4A3728',
         }
       },
       fontFamily: {
