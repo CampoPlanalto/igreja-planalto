@@ -52,7 +52,6 @@ const FIELD_TYPE_VARIANTS: Record<string, 'primary' | 'success' | 'warning' | 'g
 
 interface CampaignField {
     id: string;
-    campaign_id: string;
     label: string;
     type: string;
     required: boolean;
@@ -108,6 +107,7 @@ export default function EditCampaignPage() {
     const [form, setForm] = useState<CampaignForm>(defaultForm());
 
     const [fields, setFields] = useState<CampaignField[]>([]);
+    const [campaignSettings, setCampaignSettings] = useState<Record<string, unknown>>({});
 
     const [fieldModalOpen, setFieldModalOpen] = useState(false);
     const [editingField, setEditingField] = useState<CampaignField | null>(null);
@@ -141,7 +141,8 @@ export default function EditCampaignPage() {
                 return;
             }
 
-            const settings = (campaign.settings as Record<string, any>) || {};
+            const settings = (campaign.settings as Record<string, unknown>) || {};
+            setCampaignSettings(settings);
 
             setForm({
                 title: campaign.title || '',
@@ -158,13 +159,8 @@ export default function EditCampaignPage() {
                 allow_anonymous: settings.allow_anonymous ?? false,
             });
 
-            const { data: fieldsData } = await supabase
-                .from('campaign_fields')
-                .select('*')
-                .eq('campaign_id', campaignId)
-                .order('order', { ascending: true });
-
-            setFields(fieldsData || []);
+            const customFields = (settings.custom_fields as CampaignField[]) || [];
+            setFields(customFields);
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Erro ao carregar campanha');
         } finally {
@@ -201,6 +197,7 @@ export default function EditCampaignPage() {
                 redirect_url: form.redirect_url || null,
                 show_visitor_count: form.show_visitor_count,
                 allow_anonymous: form.allow_anonymous,
+                custom_fields: fields,
             };
 
             const { error: updateErr } = await supabase
@@ -271,31 +268,13 @@ export default function EditCampaignPage() {
                 placeholder: fieldForm.placeholder || null,
             };
 
-            if (editingField) {
-                const { data, error: updateErr } = await supabase
-                    .from('campaign_fields')
-                    .update(payload)
-                    .eq('id', editingField.id)
-                    .select()
-                    .single();
+            const updatedFields = editingField
+                ? fields.map(f => f.id === editingField.id ? { ...f, ...payload } as CampaignField : f)
+                : [...fields, { ...payload, id: crypto.randomUUID(), order: fields.length } as CampaignField];
 
-                if (updateErr) throw updateErr;
+            setFields(updatedFields);
 
-                setFields(prev =>
-                    prev.map(f => f.id === editingField.id ? data as CampaignField : f)
-                );
-            } else {
-                const maxOrder = fields.reduce((max, f) => Math.max(max, f.order), -1);
-                const { data, error: insertErr } = await supabase
-                    .from('campaign_fields')
-                    .insert({ ...payload, order: maxOrder + 1 })
-                    .select()
-                    .single();
-
-                if (insertErr) throw insertErr;
-
-                setFields(prev => [...prev, data as CampaignField]);
-            }
+            await supabase.from('campaigns').update({ settings: { ...campaignSettings, custom_fields: updatedFields } }).eq('id', campaignId);
 
             setFieldModalOpen(false);
         } catch (err) {
@@ -306,16 +285,12 @@ export default function EditCampaignPage() {
     const handleDeleteField = async () => {
         if (!deleteFieldId) return;
         try {
-            const { error: delErr } = await supabase
-                .from('campaign_fields')
-                .delete()
-                .eq('id', deleteFieldId);
-
-            if (delErr) throw delErr;
-
-            setFields(prev => prev.filter(f => f.id !== deleteFieldId));
+            const updatedFields = fields.filter(f => f.id !== deleteFieldId);
+            setFields(updatedFields);
             setShowDeleteFieldModal(false);
             setDeleteFieldId(null);
+
+            await supabase.from('campaigns').update({ settings: { ...campaignSettings, custom_fields: updatedFields } }).eq('id', campaignId);
         } catch (err) {
             alert('Erro ao excluir campo: ' + (err instanceof Error ? err.message : 'Erro desconhecido'));
         }
@@ -334,8 +309,7 @@ export default function EditCampaignPage() {
         setFields(newFields);
 
         try {
-            await supabase.from('campaign_fields').update({ order: newFields[index].order }).eq('id', newFields[index].id);
-            await supabase.from('campaign_fields').update({ order: newFields[targetIndex].order }).eq('id', newFields[targetIndex].id);
+            await supabase.from('campaigns').update({ settings: { ...campaignSettings, custom_fields: newFields } }).eq('id', campaignId);
         } catch (err) {
             console.error('Erro ao reordenar:', err);
         }
