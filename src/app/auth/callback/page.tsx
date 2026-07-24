@@ -14,7 +14,10 @@ export default function AuthCallbackPage() {
     async function handleCallback() {
       const params = new URLSearchParams(window.location.search);
       const code = params.get('code');
-      const next = params.get('next') || '/dashboard';
+      const nextParam = params.get('next') || '/dashboard';
+      const next = nextParam.startsWith('/') && !nextParam.startsWith('//') && !nextParam.includes('://')
+        ? nextParam
+        : '/dashboard';
 
       if (!code) {
         setError('Código de autenticação não encontrado');

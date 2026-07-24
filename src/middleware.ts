@@ -38,7 +38,22 @@ export async function middleware(request: NextRequest) {
     }
   );
 
-  await supabase.auth.getSession();
+  const { data: { session } } = await supabase.auth.getSession();
+
+  const pathname = request.nextUrl.pathname;
+
+  const isAuthPage = pathname === '/dashboard/login' || pathname === '/dashboard/register' || pathname === '/dashboard/reset-password';
+  const isDashboardPage = pathname.startsWith('/dashboard/') || pathname === '/dashboard';
+
+  if (isDashboardPage && !isAuthPage && !session) {
+    const loginUrl = new URL('/dashboard/login', request.url);
+    loginUrl.searchParams.set('redirect', pathname);
+    return NextResponse.redirect(loginUrl);
+  }
+
+  if (isAuthPage && session) {
+    return NextResponse.redirect(new URL('/dashboard', request.url));
+  }
 
   return response;
 }
@@ -46,8 +61,5 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     '/dashboard/:path*',
-    '/admin/:path*',
-    '/campaign/:path*',
-    '/api/:path*',
   ],
 };

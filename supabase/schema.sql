@@ -166,7 +166,8 @@ CREATE POLICY "profiles_insert_own" ON public.profiles
     FOR INSERT WITH CHECK (id = auth.uid());
 
 -- Campaigns: Church admins can manage campaigns in their church
-CREATE POLICY "campaigns_select_church" ON public.campaigns
+-- Public campaigns are visible to everyone
+CREATE POLICY "campaigns_select_public" ON public.campaigns
     FOR SELECT USING (
         church_id IN (SELECT church_id FROM public.profiles WHERE id = auth.uid())
         OR is_public = true
@@ -188,18 +189,28 @@ CREATE POLICY "campaigns_delete_admin" ON public.campaigns
     );
 
 -- Campaign Fields: Same as campaigns
-CREATE POLICY "campaign_fields_select_church" ON public.campaign_fields
+CREATE POLICY "campaign_fields_select_public" ON public.campaign_fields
     FOR SELECT USING (
         campaign_id IN (SELECT id FROM public.campaigns WHERE church_id IN (SELECT church_id FROM public.profiles WHERE id = auth.uid()))
         OR campaign_id IN (SELECT id FROM public.campaigns WHERE is_public = true)
     );
 
-CREATE POLICY "campaign_fields_manage_admin" ON public.campaign_fields
-    FOR ALL USING (
+CREATE POLICY "campaign_fields_insert_admin" ON public.campaign_fields
+    FOR INSERT WITH CHECK (
         campaign_id IN (SELECT id FROM public.campaigns WHERE church_id IN (SELECT church_id FROM public.profiles WHERE id = auth.uid() AND role IN ('church_admin', 'super_admin')))
     );
 
--- Responses: Church admins can view responses, public can insert
+CREATE POLICY "campaign_fields_update_admin" ON public.campaign_fields
+    FOR UPDATE USING (
+        campaign_id IN (SELECT id FROM public.campaigns WHERE church_id IN (SELECT church_id FROM public.profiles WHERE id = auth.uid() AND role IN ('church_admin', 'super_admin')))
+    );
+
+CREATE POLICY "campaign_fields_delete_admin" ON public.campaign_fields
+    FOR DELETE USING (
+        campaign_id IN (SELECT id FROM public.campaigns WHERE church_id IN (SELECT church_id FROM public.profiles WHERE id = auth.uid() AND role IN ('church_admin', 'super_admin')))
+    );
+
+-- Responses: Church admins can view/manage responses, public can insert
 CREATE POLICY "responses_select_admin" ON public.responses
     FOR SELECT USING (
         campaign_id IN (SELECT id FROM public.campaigns WHERE church_id IN (SELECT church_id FROM public.profiles WHERE id = auth.uid() AND role IN ('church_admin', 'super_admin')))
@@ -208,6 +219,11 @@ CREATE POLICY "responses_select_admin" ON public.responses
 CREATE POLICY "responses_insert_public" ON public.responses
     FOR INSERT WITH CHECK (
         campaign_id IN (SELECT id FROM public.campaigns WHERE is_public = true AND is_active = true)
+    );
+
+CREATE POLICY "responses_delete_admin" ON public.responses
+    FOR DELETE USING (
+        campaign_id IN (SELECT id FROM public.campaigns WHERE church_id IN (SELECT church_id FROM public.profiles WHERE id = auth.uid() AND role IN ('church_admin', 'super_admin')))
     );
 
 -- Campaign Views: Public insert, admin select
