@@ -13,8 +13,8 @@ CREATE TABLE public.churches (
     logo_url TEXT,
     banner_url TEXT,
     slogan TEXT,
-    primary_color TEXT DEFAULT '#0ea5e9',
-    secondary_color TEXT DEFAULT '#0369a1',
+    primary_color TEXT DEFAULT '#C29560',
+    secondary_color TEXT DEFAULT '#D4A86A',
     address TEXT,
     phone TEXT,
     email TEXT,
@@ -287,6 +287,47 @@ EXCEPTION WHEN OTHERS THEN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
+-- User Roles table for RBAC
+CREATE TABLE IF NOT EXISTS public.user_roles (
+    user_id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+    role TEXT NOT NULL DEFAULT 'user',
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- User Roles RLS
+ALTER TABLE public.user_roles ENABLE ROW LEVEL SECURITY;
+
+-- Helper function for admin check
+CREATE OR REPLACE FUNCTION private.is_admin()
+RETURNS boolean
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+AS $$
+  select exists (
+    select 1
+    from user_roles
+    where user_id = (select auth.uid())
+      and role in ('super_admin', 'church_admin')
+  );
+$$;
+
+CREATE POLICY "read_own_role" ON public.user_roles
+  FOR SELECT TO authenticated
+  USING ((auth.uid() = user_id) OR private.is_admin());
+
+CREATE POLICY "insert_own_role" ON public.user_roles
+  FOR INSERT TO authenticated
+  WITH CHECK (true);
+
+CREATE POLICY "update_role_admin_only" ON public.user_roles
+  FOR UPDATE TO authenticated
+  USING (private.is_admin());
+
+CREATE POLICY "admin_delete_user_roles" ON public.user_roles
+  FOR DELETE TO authenticated
+  USING ((auth.uid() = user_id) OR private.is_admin());
+
 -- Grant permissions
 GRANT USAGE ON SCHEMA public TO anon, authenticated;
 GRANT ALL ON public.churches TO authenticated;
@@ -295,6 +336,7 @@ GRANT ALL ON public.campaigns TO authenticated;
 GRANT ALL ON public.campaign_fields TO authenticated;
 GRANT ALL ON public.responses TO authenticated;
 GRANT ALL ON public.campaign_views TO authenticated;
+GRANT ALL ON public.user_roles TO authenticated;
 
 -- Seed data for testing
 INSERT INTO public.churches (name, slug, slogan, primary_color, secondary_color, email)
@@ -302,7 +344,7 @@ VALUES (
     'Igreja Campo do Planalto',
     'campo-do-planalto',
     'Vila Planalto',
-    '#0ea5e9',
-    '#0369a1',
+    '#C29560',
+    '#D4A86A',
     'contato@campodoplanalto.org'
 ) ON CONFLICT (slug) DO NOTHING;
