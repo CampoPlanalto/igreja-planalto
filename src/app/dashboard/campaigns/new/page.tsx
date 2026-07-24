@@ -9,6 +9,7 @@ import { Input, Textarea, Select, Checkbox } from '@/components/ui/Input';
 import { Alert } from '@/components/ui/FormComponents';
 import { ArrowLeft, Save, Loader2 } from 'lucide-react';
 import { generateSlug } from '@/lib/utils';
+import ImageUpload from '@/components/ui/ImageUpload';
 
 const CAMPAIGN_TYPES = [
     { value: 'geral', label: 'Geral' },
@@ -35,6 +36,7 @@ export default function NewCampaignPage() {
         title: '',
         slug: '',
         description: '',
+        banner_url: '',
         start_date: '',
         end_date: '',
         is_active: true,
@@ -115,6 +117,7 @@ export default function NewCampaignPage() {
                     church_id: churchId,
                     title: form.title.trim(),
                     slug: form.slug,
+                    banner_url: form.banner_url || null,
                     description: form.description.trim() || null,
                     start_date: form.start_date || null,
                     end_date: form.end_date || null,
@@ -195,6 +198,12 @@ export default function NewCampaignPage() {
                         value={form.description}
                         onChange={e => setForm(prev => ({ ...prev, description: e.target.value }))}
                         rows={3}
+                    />
+
+                    <ImageUpload
+                        currentUrl={form.banner_url}
+                        onUpload={url => setForm(prev => ({ ...prev, banner_url: url }))}
+                        label="Banner da Campanha"
                     />
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">

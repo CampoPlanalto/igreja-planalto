@@ -12,6 +12,7 @@ import {
     Save, Loader2, ArrowLeft, Plus, Trash2, Edit, ChevronUp, ChevronDown, FileText, GripVertical
 } from 'lucide-react';
 import { cn, generateSlug } from '@/lib/utils';
+import ImageUpload from '@/components/ui/ImageUpload';
 
 const CAMPAIGN_TYPES = [
     { value: 'geral', label: 'Geral' },
@@ -64,6 +65,7 @@ interface CampaignForm {
     title: string;
     slug: string;
     description: string;
+    banner_url: string;
     start_date: string;
     end_date: string;
     is_active: boolean;
@@ -80,6 +82,7 @@ function defaultForm(): CampaignForm {
         title: '',
         slug: '',
         description: '',
+        banner_url: '',
         start_date: '',
         end_date: '',
         is_active: true,
@@ -148,6 +151,7 @@ export default function EditCampaignPage() {
                 title: campaign.title || '',
                 slug: campaign.slug || '',
                 description: campaign.description || '',
+                banner_url: campaign.banner_url || '',
                 start_date: campaign.start_date ? campaign.start_date.split('T')[0] : '',
                 end_date: campaign.end_date ? campaign.end_date.split('T')[0] : '',
                 is_active: campaign.is_active ?? true,
@@ -205,6 +209,7 @@ export default function EditCampaignPage() {
                 .update({
                     title: form.title.trim(),
                     slug: form.slug,
+                    banner_url: form.banner_url || null,
                     description: form.description.trim() || null,
                     start_date: form.start_date || null,
                     end_date: form.end_date || null,
@@ -418,6 +423,12 @@ export default function EditCampaignPage() {
                         value={form.description}
                         onChange={e => setForm(prev => ({ ...prev, description: e.target.value }))}
                         rows={3}
+                    />
+
+                    <ImageUpload
+                        currentUrl={form.banner_url}
+                        onUpload={url => setForm(prev => ({ ...prev, banner_url: url }))}
+                        label="Banner da Campanha"
                     />
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">

@@ -5,11 +5,11 @@ import { createClient } from '@/lib/supabase/client';
 import { Card, CardHeader, CardBody, Badge } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Input, Textarea, Select } from '@/components/ui/Input';
+import ImageUpload from '@/components/ui/ImageUpload';
 import { Modal, ConfirmDialog } from '@/components/ui/Modal';
 import {
     Settings,
     Save,
-    Image,
     Palette,
     Globe,
     MapPin,
@@ -403,40 +403,18 @@ export default function SettingsPage() {
                             placeholder="Uma igreja para todas as gerações"
                         />
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <Input
-                                    label="URL do Logo"
-                                    value={formLogoUrl}
-                                    onChange={e => setFormLogoUrl(e.target.value)}
-                                    placeholder="https://exemplo.com/logo.png"
-                                />
-                                {formLogoUrl ? (
-                                    <div className="relative w-32 h-32 rounded-lg overflow-hidden border border-gray-200 bg-gray-50">
-                                        <img src={formLogoUrl} alt="Logo preview" className="w-full h-full object-contain" onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }} />
-                                    </div>
-                                ) : (
-                                    <div className="w-32 h-32 rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 flex items-center justify-center text-gray-400">
-                                        <Image className="h-8 w-8" />
-                                    </div>
-                                )}
-                            </div>
-                            <div className="space-y-2">
-                                <Input
-                                    label="URL do Banner"
-                                    value={formBannerUrl}
-                                    onChange={e => setFormBannerUrl(e.target.value)}
-                                    placeholder="https://exemplo.com/banner.png"
-                                />
-                                {formBannerUrl ? (
-                                    <div className="relative w-full h-24 rounded-lg overflow-hidden border border-gray-200 bg-gray-50">
-                                        <img src={formBannerUrl} alt="Banner preview" className="w-full h-full object-cover" onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }} />
-                                    </div>
-                                ) : (
-                                    <div className="w-full h-24 rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 flex items-center justify-center text-gray-400">
-                                        <Image className="h-8 w-8" />
-                                    </div>
-                                )}
-                            </div>
+                            <ImageUpload
+                                currentUrl={formLogoUrl}
+                                onUpload={url => setFormLogoUrl(url)}
+                                label="Logo"
+                                previewClassName="w-32"
+                            />
+                            <ImageUpload
+                                currentUrl={formBannerUrl}
+                                onUpload={url => setFormBannerUrl(url)}
+                                label="Banner"
+                                previewClassName="w-full"
+                            />
                         </div>
                         <div className="flex justify-end">
                             <Button onClick={handleSaveProfile} loading={saving === 'profile'}>
@@ -786,23 +764,12 @@ export default function SettingsPage() {
                                 placeholder="Seu nome"
                             />
                         </div>
-                        <div className="space-y-2">
-                            <Input
-                                label="URL do Avatar"
-                                value={myAvatarUrl}
-                                onChange={e => setMyAvatarUrl(e.target.value)}
-                                placeholder="https://exemplo.com/avatar.png"
-                            />
-                            {myAvatarUrl ? (
-                                <div className="relative w-20 h-20 rounded-full overflow-hidden border border-gray-200 bg-gray-50">
-                                    <img src={myAvatarUrl} alt="Avatar preview" className="w-full h-full object-cover" onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }} />
-                                </div>
-                            ) : (
-                                <div className="w-20 h-20 rounded-full border-2 border-dashed border-gray-300 bg-gray-50 flex items-center justify-center text-gray-400">
-                                    <User className="h-8 w-8" />
-                                </div>
-                            )}
-                        </div>
+                        <ImageUpload
+                            currentUrl={myAvatarUrl}
+                            onUpload={url => setMyAvatarUrl(url)}
+                            label="Avatar"
+                            previewClassName="w-20 rounded-full"
+                        />
                         <div className="flex justify-end">
                             <Button onClick={handleSaveMyProfile} loading={saving === 'my-profile'}>
                                 <Save className="h-4 w-4 mr-2" />
