@@ -128,7 +128,7 @@ export function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => v
                         <Link
                             href="/dashboard/logout"
                             className={cn(
-                                'flex items-center px-3 py-2.5 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 transition-colors'
+                                'flex items-center px-3 py-2.5 rounded-lg text-sm font-medium text-primary-600 hover:bg-primary-50 transition-colors'
                             )}
                         >
                             <LogOut className="h-5 w-5 mr-3" aria-hidden="true" />
@@ -202,7 +202,7 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
                 </div>
             </header>
             <main>{children}</main>
-            <footer className="bg-gray-100 border-t border-gray-200 py-8">
+            <footer className="bg-primary-100 border-t border-[#e5dcc8] py-8">
                 <div className="container-custom text-center text-sm text-gray-500">
                     <p>Igreja Campo do Planalto - Vila Planalto</p>
                 </div>

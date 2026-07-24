@@ -299,7 +299,7 @@ export default function CampaignsPage() {
                                                         }}
                                                         title={campaign.is_active ? 'Arquivar' : 'Ativar'}
                                                     >
-                                                        <Archive className={cn('h-4 w-4', !campaign.is_active && 'text-primary-600')} />
+                                                        <Archive className={cn('h-4 w-4', !campaign.is_active && 'text-green-600')} />
                                                     </Button>
                                                     <Button
                                                         variant="ghost"

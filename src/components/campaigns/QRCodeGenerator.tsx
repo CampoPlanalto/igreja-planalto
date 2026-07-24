@@ -428,7 +428,7 @@ export function QRCodeGenerator({
                     <div className="border-t border-gray-100 pt-4">
                         <Button
                             variant="ghost"
-                            className="text-red-600 hover:bg-red-50"
+                            className="text-primary-600 hover:bg-primary-50"
                             onClick={() => {
                                 setOptions(DEFAULT_OPTIONS);
                                 setLogoFile(null);
@@ -507,7 +507,7 @@ export function QRCodeGenerator({
 
             {/* Tips */}
             <Alert variant="info" title="Dicas de uso">
-                <ul className="list-disc list-inside space-y-1 text-sm text-blue-800 mt-2">
+                <ul className="list-disc list-inside space-y-1 text-sm text-primary-800 mt-2">
                     <li>Para impressão em panfletos/banners, use <strong>SVG</strong> (vetor, não perde qualidade)</li>
                     <li>Para redes sociais e web, <strong>PNG 512px</strong> é ideal</li>
                     <li>Teste o QR Code com seu celular antes de imprimir em massa</li>

@@ -215,7 +215,7 @@ export default function UsersPage() {
         return (
             <div className="flex items-center justify-center min-h-[60vh]">
                 <div className="text-center">
-                    <Shield className="h-16 w-16 text-primary-300 mx-auto mb-4" />
+                    <Shield className="h-16 w-16 text-red-300 mx-auto mb-4" />
                     <h2 className="text-xl font-semibold text-gray-900 mb-2">Acesso Restrito</h2>
                     <p className="text-gray-500">Apenas super administradores podem gerenciar usuários.</p>
                 </div>
@@ -241,8 +241,8 @@ export default function UsersPage() {
             {feedback && (
                 <div className={`flex items-center p-4 rounded-lg border ${
                     feedback.type === 'success'
-                        ? 'bg-primary-50 border-primary-200 text-primary-800'
-                        : 'bg-primary-50 border-primary-200 text-primary-800'
+                        ? 'bg-green-50 border-green-200 text-green-800'
+                        : 'bg-red-50 border-red-200 text-red-800'
                 }`} role="alert">
                     {feedback.type === 'success' ? (
                         <CheckCircle className="h-5 w-5 mr-2 flex-shrink-0" />

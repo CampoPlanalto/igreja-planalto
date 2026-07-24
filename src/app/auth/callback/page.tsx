@@ -39,7 +39,7 @@ export default function AuthCallbackPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-primary-50">
         <div className="text-center max-w-md mx-auto px-4">
           <AlertCircle className="h-16 w-16 text-red-500 mx-auto mb-4" />
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Erro na autenticação</h1>
@@ -56,7 +56,7 @@ export default function AuthCallbackPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center bg-primary-50">
       <div className="text-center">
         <Loader2 className="h-12 w-12 animate-spin text-primary-600 mx-auto mb-4" />
         <p className="text-gray-600 text-lg">Autenticando...</p>

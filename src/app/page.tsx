@@ -6,7 +6,7 @@ import { Church, QrCode, ArrowRight, Shield } from 'lucide-react';
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-primary-50">
       {/* Header */}
       <header className="bg-white border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -64,7 +64,7 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-gray-50 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-primary-50 to-transparent" />
       </section>
 
       {/* Info Section */}
@@ -104,7 +104,7 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-100 border-t border-gray-200 py-8">
+      <footer className="bg-primary-100 border-t border-[#e5dcc8] py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm text-gray-500">
           <p>Igreja Campo do Planalto - Laranjal do Jari - AP</p>
         </div>
