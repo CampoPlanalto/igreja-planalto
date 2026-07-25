@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Upload, X, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { uploadImage } from '@/lib/supabase/upload';
@@ -13,11 +13,21 @@ interface ImageUploadProps {
   previewClassName?: string;
 }
 
+let idCounter = 0;
+
 export default function ImageUpload({ currentUrl, onUpload, label, className, previewClassName }: ImageUploadProps) {
+  const [uid] = useState(() => `image-upload-${++idCounter}`);
   const [preview, setPreview] = useState<string | null>(currentUrl || null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const objectUrlRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (objectUrlRef.current) URL.revokeObjectURL(objectUrlRef.current);
+    };
+  }, []);
 
   const handleFile = async (file: File) => {
     if (!file.type.startsWith('image/')) {
@@ -30,19 +40,18 @@ export default function ImageUpload({ currentUrl, onUpload, label, className, pr
     }
 
     setError(null);
+
+    if (objectUrlRef.current) URL.revokeObjectURL(objectUrlRef.current);
+    const objectUrl = URL.createObjectURL(file);
+    objectUrlRef.current = objectUrl;
+    setPreview(objectUrl);
+
     setUploading(true);
-
     try {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setPreview(e.target?.result as string);
-      };
-      reader.readAsDataURL(file);
-
       const url = await uploadImage(file, `upload-${Date.now()}`);
       onUpload(url);
     } catch (err) {
-      setError('Erro ao fazer upload');
+      setError('Erro ao fazer upload. Verifique as permissões do Storage.');
       setPreview(currentUrl || null);
     } finally {
       setUploading(false);
@@ -70,7 +79,7 @@ export default function ImageUpload({ currentUrl, onUpload, label, className, pr
         accept="image/png,image/jpeg,image/gif,image/webp"
         onChange={handleChange}
         className="hidden"
-        id="image-upload-input"
+        id={uid}
       />
 
       {preview ? (
