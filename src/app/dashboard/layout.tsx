@@ -2,6 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import { DashboardLayout } from '@/components/layout/Layout';
+import { ToastProvider } from '@/components/ui/Toast';
 
 const authRoutes = ['/dashboard/login', '/dashboard/register', '/dashboard/reset-password', '/dashboard/logout'];
 
@@ -10,8 +11,8 @@ export default function DashboardRootLayout({ children }: { children: React.Reac
     const isAuthRoute = authRoutes.some(route => pathname.startsWith(route));
 
     if (isAuthRoute) {
-        return <>{children}</>;
+        return <ToastProvider>{children}</ToastProvider>;
     }
 
-    return <DashboardLayout>{children}</DashboardLayout>;
+    return <ToastProvider><DashboardLayout>{children}</DashboardLayout></ToastProvider>;
 }

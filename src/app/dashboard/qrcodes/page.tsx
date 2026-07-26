@@ -23,7 +23,7 @@ type CampaignItem = {
   church: { slug: string }[] | null;
 };
 
-const BASE_URL = 'https://igrejaplanalto.onrender.com';
+const BASE_URL = process.env.NEXT_PUBLIC_APP_URL;
 
 export default function QRCodesPage() {
   const supabase = createClient();

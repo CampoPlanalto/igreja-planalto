@@ -4,7 +4,8 @@ import { useState, useEffect, useRef } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { Card, CardHeader, CardBody, Badge } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import { Input, Textarea, Select } from '@/components/ui/Input';
+import { Input } from '@/components/ui/Input';
+import { Textarea, Select } from '@/components/ui/FormComponents';
 import ImageUpload from '@/components/ui/ImageUpload';
 import { Modal, ConfirmDialog } from '@/components/ui/Modal';
 import {

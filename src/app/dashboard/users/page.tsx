@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { Card, CardHeader, CardBody, Badge } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import { Input, Select } from '@/components/ui/Input';
+import { Input } from '@/components/ui/Input';
+import { Select } from '@/components/ui/FormComponents';
 import { Modal, ConfirmDialog } from '@/components/ui/Modal';
 import {
     Users, Plus, Shield, Search, Edit2, Trash2, Key, Mail, Loader2, AlertCircle, CheckCircle, Crown

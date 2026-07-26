@@ -318,7 +318,13 @@ CREATE POLICY "read_own_role" ON public.user_roles
 
 CREATE POLICY "insert_own_role" ON public.user_roles
   FOR INSERT TO authenticated
-  WITH CHECK (true);
+  WITH CHECK (
+    user_id = auth.uid()
+    AND role IN ('user', 'member')
+    AND NOT EXISTS (
+      SELECT 1 FROM public.user_roles WHERE user_id = auth.uid()
+    )
+  );
 
 CREATE POLICY "update_role_admin_only" ON public.user_roles
   FOR UPDATE TO authenticated
@@ -337,6 +343,23 @@ GRANT ALL ON public.campaign_fields TO authenticated;
 GRANT ALL ON public.responses TO authenticated;
 GRANT ALL ON public.campaign_views TO authenticated;
 GRANT ALL ON public.user_roles TO authenticated;
+
+-- Storage RLS policies for images bucket
+CREATE POLICY "give_public_access_images" ON storage.objects
+  FOR SELECT TO public
+  USING (bucket_id = 'images');
+
+CREATE POLICY "authenticated_upload_images" ON storage.objects
+  FOR INSERT TO authenticated
+  WITH CHECK (bucket_id = 'images');
+
+CREATE POLICY "authenticated_update_images" ON storage.objects
+  FOR UPDATE TO authenticated
+  USING (bucket_id = 'images');
+
+CREATE POLICY "authenticated_delete_images" ON storage.objects
+  FOR DELETE TO authenticated
+  USING (bucket_id = 'images');
 
 -- Seed data for testing
 INSERT INTO public.churches (name, slug, slogan, primary_color, secondary_color, email)

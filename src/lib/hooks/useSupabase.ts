@@ -192,7 +192,7 @@ export function useResponses(campaignId?: string) {
         return [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
     };
 
-    const exportToExcel = () => {
+    const downloadCSV = () => {
         const csv = exportToCSV();
         const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement('a');
@@ -201,7 +201,7 @@ export function useResponses(campaignId?: string) {
         link.click();
     };
 
-    return { responses, loading, error, exportToCSV: exportToExcel, refetch: fetchResponses };
+    return { responses, loading, error, downloadCSV, refetch: fetchResponses };
 }
 
 export function useDashboardStats(churchId?: string) {

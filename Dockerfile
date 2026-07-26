@@ -4,7 +4,7 @@ FROM base AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 COPY package.json package-lock.json* ./
-RUN npm ci --only=production
+RUN npm ci
 
 FROM base AS builder
 WORKDIR /app
@@ -24,3 +24,6 @@ USER nextjs
 EXPOSE 3000
 ENV PORT=3000
 CMD ["node", "server.js"]
+
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:3000/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"

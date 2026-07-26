@@ -48,7 +48,7 @@ export default function HomePage() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link href="/campanhas">
+              <Link href="/dashboard/campaigns">
                 <Button variant="gold" size="xl" className="w-full sm:w-auto">
                   <QrCode className="h-5 w-5 mr-2" />
                   Preencher minha ficha

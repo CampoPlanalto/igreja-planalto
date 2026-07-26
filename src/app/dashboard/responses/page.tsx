@@ -4,7 +4,8 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { Card, CardHeader, CardBody, Badge } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import { Input, Select } from '@/components/ui/Input';
+import { Input } from '@/components/ui/Input';
+import { Select } from '@/components/ui/FormComponents';
 import { Modal } from '@/components/ui/Modal';
 import {
   Search,
@@ -120,7 +121,8 @@ export default function ResponsesPage() {
     URL.revokeObjectURL(link.href);
   }, [filteredResponses, allDataKeys]);
 
-  const exportExcel = useCallback(() => {
+  // Exporta CSV com extensão .xls e MIME type Excel para compatibilidade (Excel abre como tabela)
+  const exportAsExcel = useCallback(() => {
     if (!filteredResponses.length) return;
     const headers = ['Nome', 'Telefone', 'Email', 'Campanha', 'Data', ...allDataKeys];
     const rows = filteredResponses.map((r) => [
@@ -172,7 +174,7 @@ export default function ResponsesPage() {
             <Download className="h-4 w-4 mr-1" />
             Exportar CSV
           </Button>
-          <Button variant="outline" size="sm" onClick={exportExcel}>
+          <Button variant="outline" size="sm" onClick={exportAsExcel}>
             <FileSpreadsheet className="h-4 w-4 mr-1" />
             Exportar Excel
           </Button>

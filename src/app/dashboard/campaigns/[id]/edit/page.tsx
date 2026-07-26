@@ -5,7 +5,8 @@ import { useRouter, useParams } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { Card, CardBody, CardHeader, Badge, Divider } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import { Input, Textarea, Select, Checkbox } from '@/components/ui/Input';
+import { Input } from '@/components/ui/Input';
+import { Textarea, Select, Checkbox } from '@/components/ui/FormComponents';
 import { Modal, ConfirmDialog } from '@/components/ui/Modal';
 import { Alert } from '@/components/ui/FormComponents';
 import {

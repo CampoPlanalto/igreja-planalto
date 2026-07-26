@@ -7,3 +7,8 @@ out/
 next-env.d.ts
 .DS_Store
 *.log
+coverage/
+playwright-report/
+test-results/
+.eslintcache
+.env.production
