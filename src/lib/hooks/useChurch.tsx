@@ -15,9 +15,12 @@ export interface Church {
   address: string | null;
   phone: string | null;
   email: string | null;
+  website: string | null;
   whatsapp: string | null;
   social_links: Record<string, string>;
   settings: Record<string, unknown>;
+  created_at: string;
+  updated_at: string;
 }
 
 interface ChurchContextType {
