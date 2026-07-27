@@ -34,6 +34,11 @@ import type { Database } from '@/types/database';
 type ChurchRow = Database['public']['Tables']['churches']['Row'];
 type ProfileRow = Database['public']['Tables']['profiles']['Row'];
 
+interface AlertState {
+    type: 'success' | 'error';
+    message: string;
+}
+
 const TABS = [
     { id: 'profile', label: 'Perfil', icon: ChurchIcon },
     { id: 'contact', label: 'Contato', icon: Mail },
