@@ -132,7 +132,7 @@ export default function SettingsPage() {
             if (!user) return;
 
             if (currentChurch) {
-                setChurch(currentChurch);
+                setChurch(currentChurch as unknown as ChurchRow);
                 setFormName(currentChurch.name);
                 setFormSlug(currentChurch.slug);
                 setFormSlogan(currentChurch.slogan || '');
@@ -480,7 +480,7 @@ export default function SettingsPage() {
                 <Card>
                     <CardHeader>
                         <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                            <Church className="h-5 w-5 text-primary-600" />
+                            <ChurchIcon className="h-5 w-5 text-primary-600" />
                             Perfil da Igreja
                         </h2>
                     </CardHeader>
