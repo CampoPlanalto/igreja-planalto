@@ -148,11 +148,17 @@ CREATE POLICY "churches_select_own" ON public.churches
 CREATE POLICY "churches_insert_admin" ON public.churches
     FOR INSERT WITH CHECK (
         EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'super_admin')
+        OR private.is_admin()
     );
 
 CREATE POLICY "churches_update_admin" ON public.churches
     FOR UPDATE USING (
         id IN (SELECT church_id FROM public.profiles WHERE id = auth.uid() AND role IN ('church_admin', 'super_admin'))
+    );
+
+CREATE POLICY "churches_delete_admin" ON public.churches
+    FOR DELETE USING (
+        EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'super_admin')
     );
 
 -- Profiles: Users can read/update their own profile
