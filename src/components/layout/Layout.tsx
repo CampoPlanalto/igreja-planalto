@@ -16,9 +16,12 @@ import {
     ChevronDown,
     Church,
     Shield,
+    Building2,
+    ChevronRight,
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
+import { useChurch } from '@/lib/hooks/useChurch';
 
 const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
@@ -31,6 +34,8 @@ const navigation = [
 export function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
     const pathname = usePathname();
     const [userRole, setUserRole] = useState<string | null>(null);
+    const [showChurches, setShowChurches] = useState(false);
+    const { currentChurch, churches, setCurrentChurch, isSuperAdmin } = useChurch();
     const supabase = createClient();
 
     useEffect(() => {
@@ -77,6 +82,53 @@ export function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => v
                         >
                             <X className="h-5 w-5" />
                         </button>
+                    </div>
+
+                    <div className="px-4 py-3 border-b border-gray-100">
+                        {isSuperAdmin && churches.length > 1 ? (
+                            <div>
+                                <button
+                                    onClick={() => setShowChurches(!showChurches)}
+                                    className="flex items-center justify-between w-full px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors"
+                                >
+                                    <div className="flex items-center gap-2">
+                                        <Building2 className="h-4 w-4" />
+                                        <span className="truncate">{currentChurch?.name || 'Todas as Igrejas'}</span>
+                                    </div>
+                                    <ChevronDown className={cn('h-4 w-4 transition-transform', showChurches && 'rotate-180')} />
+                                </button>
+                                {showChurches && (
+                                    <div className="mt-1 ml-2 space-y-0.5">
+                                        {churches.map((church) => (
+                                            <button
+                                                key={church.id}
+                                                onClick={() => {
+                                                    setCurrentChurch(church);
+                                                    setShowChurches(false);
+                                                }}
+                                                className={cn(
+                                                    'flex items-center w-full px-3 py-1.5 rounded-lg text-xs transition-colors',
+                                                    currentChurch?.id === church.id
+                                                        ? 'bg-primary-50 text-primary-700 font-medium'
+                                                        : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
+                                                )}
+                                            >
+                                                <ChevronRight className={cn(
+                                                    'h-3 w-3 mr-2',
+                                                    currentChurch?.id === church.id ? 'text-primary-600' : 'text-gray-300'
+                                                )} />
+                                                {church.name}
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        ) : currentChurch ? (
+                            <div className="flex items-center gap-2 px-3 py-2">
+                                <Building2 className="h-4 w-4 text-primary-600" />
+                                <span className="text-sm font-medium text-gray-700 truncate">{currentChurch.name}</span>
+                            </div>
+                        ) : null}
                     </div>
 
                     <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto" role="navigation" aria-label="Navegação principal">

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
+import { useChurch } from '@/lib/hooks/useChurch';
 
 import { Card, CardHeader, CardBody } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
@@ -106,6 +107,7 @@ interface VisitorTrend {
 
 export default function DashboardPage() {
     const router = useRouter();
+    const { currentChurch, isSuperAdmin, churches } = useChurch();
     const [stats, setStats] = useState<DashboardStats | null>(null);
     const [trends, setTrends] = useState<VisitorTrend[]>([]);
     const [campaigns, setCampaigns] = useState<Campaign[]>([]);
@@ -128,17 +130,19 @@ export default function DashboardPage() {
     const supabase = createClient();
 
     useEffect(() => {
-        fetchAllData();
-    }, []);
+        if (currentChurch) fetchAllData();
+    }, [currentChurch]);
 
     const fetchAllData = async () => {
+        if (!currentChurch) return;
         try {
             setLoading(true);
 
-            // Fetch stats
+            // Fetch campaigns for the current church
             const { data: campaignsData } = await supabase
                 .from('campaigns')
                 .select('*, church:churches!inner(slug), responses(count)')
+                .eq('church_id', currentChurch.id)
                 .order('created_at', { ascending: false });
 
             if (campaignsData) {
@@ -299,7 +303,7 @@ export default function DashboardPage() {
                 <div>
                     <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
                     <p className="text-gray-600 mt-1">
-                        Visão geral das campanhas e visitantes da Igreja Campo do Planalto
+                        Visão geral de <strong>{currentChurch?.name || 'Igreja Campo do Planalto'}</strong>
                     </p>
                 </div>
                 <Button onClick={() => router.push('/dashboard/campaigns/new')}>

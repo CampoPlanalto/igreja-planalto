@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { createClient } from '@/lib/supabase/client';
+import { useChurch } from '@/lib/hooks/useChurch';
 import { Card, CardHeader, CardBody, Badge } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -48,6 +49,7 @@ const TABS = [
 
 export default function SettingsPage() {
     const supabase = createClient();
+    const { currentChurch, isSuperAdmin, refetch: refetchChurch } = useChurch();
 
     const [activeTab, setActiveTab] = useState('profile');
     const [church, setChurch] = useState<ChurchRow | null>(null);
@@ -95,8 +97,10 @@ export default function SettingsPage() {
     const slugManuallyEdited = useRef(false);
 
     useEffect(() => {
-        fetchData();
-    }, []);
+        if (currentChurch) {
+            fetchData();
+        }
+    }, [currentChurch]);
 
     useEffect(() => {
         if (alert) {
@@ -110,44 +114,39 @@ export default function SettingsPage() {
             setLoading(true);
 
             const { data: { user } } = await supabase.auth.getUser();
+            if (!user) return;
 
-            const { data: churchData } = await supabase
-                .from('churches')
-                .select('*')
-                .limit(1)
-                .single();
+            if (currentChurch) {
+                setChurch(currentChurch);
+                setFormName(currentChurch.name);
+                setFormSlug(currentChurch.slug);
+                setFormSlogan(currentChurch.slogan || '');
+                setFormLogoUrl(currentChurch.logo_url || '');
+                setFormBannerUrl(currentChurch.banner_url || '');
+                setFormAddress(currentChurch.address || '');
+                setFormPhone(currentChurch.phone || '');
+                setFormEmail(currentChurch.email || '');
+                setFormWebsite(currentChurch.website || '');
 
-            if (churchData) {
-                setChurch(churchData);
-                setFormName(churchData.name);
-                setFormSlug(churchData.slug);
-                setFormSlogan(churchData.slogan || '');
-                setFormLogoUrl(churchData.logo_url || '');
-                setFormBannerUrl(churchData.banner_url || '');
-                setFormAddress(churchData.address || '');
-                setFormPhone(churchData.phone || '');
-                setFormEmail(churchData.email || '');
-                setFormWebsite(churchData.website || '');
-
-                const social = (churchData.social_links || {}) as Record<string, string>;
+                const social = (currentChurch.social_links || {}) as Record<string, string>;
                 setFormFacebook(social.facebook || '');
                 setFormInstagram(social.instagram || '');
                 setFormYoutube(social.youtube || '');
-                setFormWhatsapp(churchData.whatsapp || social.whatsapp || '');
+                setFormWhatsapp(currentChurch.whatsapp || social.whatsapp || '');
 
-                setFormPrimaryColor(churchData.primary_color || '#C29560');
-                setFormSecondaryColor(churchData.secondary_color || '#D4A86A');
+                setFormPrimaryColor(currentChurch.primary_color || '#C29560');
+                setFormSecondaryColor(currentChurch.secondary_color || '#D4A86A');
 
-                const settings = (churchData.settings || {}) as Record<string, unknown>;
+                const settings = (currentChurch.settings || {}) as Record<string, unknown>;
                 setFormAllowRegistration((settings.allow_registration as boolean) ?? true);
                 setFormRequireApproval((settings.require_approval as boolean) ?? true);
                 setFormNotificationEmail((settings.notification_email as string) || '');
 
-                if (churchData.id) {
+                if (currentChurch.id) {
                     const { data: profilesData } = await supabase
                         .from('profiles')
                         .select('*')
-                        .eq('church_id', churchData.id)
+                        .eq('church_id', currentChurch.id)
                         .order('created_at', { ascending: true });
 
                     if (profilesData) {
@@ -198,6 +197,7 @@ export default function SettingsPage() {
 
             if (error) throw error;
             setChurch(prev => prev ? { ...prev, ...updates } : null);
+            refetchChurch();
             showAlert('success', 'Salvo com sucesso!');
         } catch (err) {
             showAlert('error', err instanceof Error ? err.message : 'Erro ao salvar');
@@ -335,7 +335,9 @@ export default function SettingsPage() {
             <div className="flex items-center justify-between mb-6">
                 <div>
                     <h1 className="text-2xl font-bold text-gray-900">Configurações</h1>
-                    <p className="text-gray-500 mt-1">Gerencie as configurações da sua igreja</p>
+                    <p className="text-gray-500 mt-1">
+                        Gerenciando: <strong>{church?.name || 'Carregando...'}</strong>
+                    </p>
                 </div>
             </div>
 
