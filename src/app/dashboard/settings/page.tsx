@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { useChurch } from '@/lib/hooks/useChurch';
+import { useChurch, type Church } from '@/lib/hooks/useChurch';
 import { Card, CardHeader, CardBody, Badge } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -23,8 +23,10 @@ import {
     CheckCircle,
     Plus,
     Trash2,
-    Church,
+    Church as ChurchIcon,
     Mail,
+    Building2,
+    Edit,
 } from 'lucide-react';
 import { cn, slugify } from '@/lib/utils';
 import type { Database } from '@/types/database';
@@ -32,17 +34,13 @@ import type { Database } from '@/types/database';
 type ChurchRow = Database['public']['Tables']['churches']['Row'];
 type ProfileRow = Database['public']['Tables']['profiles']['Row'];
 
-interface AlertState {
-    type: 'success' | 'error';
-    message: string;
-}
-
 const TABS = [
-    { id: 'profile', label: 'Perfil', icon: Church },
+    { id: 'profile', label: 'Perfil', icon: ChurchIcon },
     { id: 'contact', label: 'Contato', icon: Mail },
     { id: 'social', label: 'Redes Sociais', icon: Globe },
     { id: 'colors', label: 'Personalização', icon: Palette },
     { id: 'config', label: 'Configurações', icon: Settings },
+    { id: 'congregations', label: 'Congregações', icon: Building2 },
     { id: 'users', label: 'Usuários', icon: Shield },
     { id: 'my-profile', label: 'Meu Perfil', icon: User },
 ];
@@ -93,6 +91,18 @@ export default function SettingsPage() {
 
     const [myName, setMyName] = useState('');
     const [myAvatarUrl, setMyAvatarUrl] = useState('');
+
+    // Congregations state
+    const [allChurches, setAllChurches] = useState<ChurchRow[]>([]);
+    const [showNewChurchModal, setShowNewChurchModal] = useState(false);
+    const [showEditChurchModal, setShowEditChurchModal] = useState(false);
+    const [editingChurch, setEditingChurch] = useState<ChurchRow | null>(null);
+    const [newChurchName, setNewChurchName] = useState('');
+    const [newChurchSlug, setNewChurchSlug] = useState('');
+    const [newChurchSlogan, setNewChurchSlogan] = useState('');
+    const [savingChurch, setSavingChurch] = useState(false);
+    const [deleteChurchId, setDeleteChurchId] = useState<string | null>(null);
+    const [showDeleteChurchModal, setShowDeleteChurchModal] = useState(false);
 
     const slugManuallyEdited = useRef(false);
 
@@ -152,6 +162,16 @@ export default function SettingsPage() {
                     if (profilesData) {
                         setProfiles(profilesData);
                     }
+                }
+            }
+
+            if (isSuperAdmin) {
+                const { data: churchesData } = await supabase
+                    .from('churches')
+                    .select('*')
+                    .order('name', { ascending: true });
+                if (churchesData) {
+                    setAllChurches(churchesData);
                 }
             }
 
@@ -263,6 +283,85 @@ export default function SettingsPage() {
             showAlert('error', err instanceof Error ? err.message : 'Erro ao salvar');
         } finally {
             setSaving(null);
+        }
+    };
+
+    const handleCreateChurch = async () => {
+        if (!newChurchName.trim() || !newChurchSlug.trim()) return;
+        try {
+            setSavingChurch(true);
+            const { data, error } = await supabase
+                .from('churches')
+                .insert({
+                    name: newChurchName.trim(),
+                    slug: newChurchSlug.trim(),
+                    slogan: newChurchSlogan.trim() || null,
+                    primary_color: '#C29560',
+                    secondary_color: '#D4A86A',
+                })
+                .select()
+                .single();
+
+            if (error) throw error;
+            setAllChurches(prev => [...prev, data]);
+            setShowNewChurchModal(false);
+            setNewChurchName('');
+            setNewChurchSlug('');
+            setNewChurchSlogan('');
+            refetchChurch();
+            showAlert('success', `Congregação "${data.name}" criada!`);
+        } catch (err) {
+            showAlert('error', err instanceof Error ? err.message : 'Erro ao criar');
+        } finally {
+            setSavingChurch(false);
+        }
+    };
+
+    const handleEditChurch = async () => {
+        if (!editingChurch || !editingChurch.name.trim() || !editingChurch.slug.trim()) return;
+        try {
+            setSavingChurch(true);
+            const { error } = await supabase
+                .from('churches')
+                .update({
+                    name: editingChurch.name.trim(),
+                    slug: editingChurch.slug.trim(),
+                    slogan: editingChurch.slogan?.trim() || null,
+                })
+                .eq('id', editingChurch.id);
+
+            if (error) throw error;
+            setAllChurches(prev => prev.map(c => c.id === editingChurch.id ? { ...c, ...editingChurch } : c));
+            setShowEditChurchModal(false);
+            setEditingChurch(null);
+            refetchChurch();
+            showAlert('success', 'Congregação atualizada!');
+        } catch (err) {
+            showAlert('error', err instanceof Error ? err.message : 'Erro ao atualizar');
+        } finally {
+            setSavingChurch(false);
+        }
+    };
+
+    const handleDeleteChurch = async () => {
+        if (!deleteChurchId) return;
+        try {
+            setSavingChurch(true);
+            const { error } = await supabase
+                .from('churches')
+                .delete()
+                .eq('id', deleteChurchId);
+
+            if (error) throw error;
+            setAllChurches(prev => prev.filter(c => c.id !== deleteChurchId));
+            setShowDeleteChurchModal(false);
+            setDeleteChurchId(null);
+            refetchChurch();
+            showAlert('success', 'Congregação removida!');
+        } catch (err) {
+            showAlert('error', err instanceof Error ? err.message : 'Erro ao remover');
+        } finally {
+            setSavingChurch(false);
         }
     };
 
@@ -679,6 +778,96 @@ export default function SettingsPage() {
                 </Card>
             )}
 
+            {activeTab === 'congregations' && isSuperAdmin && (
+                <Card>
+                    <CardHeader className="flex flex-row items-center justify-between">
+                        <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                            <Building2 className="h-5 w-5 text-primary-600" />
+                            Congregações
+                        </h2>
+                        <Button onClick={() => {
+                            setNewChurchName('');
+                            setNewChurchSlug('');
+                            setNewChurchSlogan('');
+                            setShowNewChurchModal(true);
+                        }}>
+                            <Plus className="h-4 w-4 mr-2" />
+                            Nova Congregação
+                        </Button>
+                    </CardHeader>
+                    <CardBody className="p-0">
+                        {allChurches.length === 0 ? (
+                            <div className="p-12 text-center">
+                                <Building2 className="h-12 w-12 mx-auto mb-3 text-gray-300" />
+                                <p className="text-gray-500">Nenhuma congregação cadastrada</p>
+                            </div>
+                        ) : (
+                            <div className="overflow-x-auto">
+                                <table className="w-full">
+                                    <thead>
+                                        <tr className="border-b border-gray-200 bg-gray-50">
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Slug</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Slogan</th>
+                                            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-gray-200">
+                                        {allChurches.map(churchItem => (
+                                            <tr key={churchItem.id} className="hover:bg-gray-50">
+                                                <td className="px-6 py-4">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="h-8 w-8 rounded-full bg-primary-100 flex items-center justify-center text-primary-700 text-sm font-medium">
+                                                            {churchItem.name.charAt(0).toUpperCase()}
+                                                        </div>
+                                                        <div>
+                                                            <span className="font-medium text-gray-900">{churchItem.name}</span>
+                                                            {churchItem.id === currentChurch?.id && (
+                                                                <Badge variant="primary" className="ml-2">Atual</Badge>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-4 text-sm text-gray-600 font-mono">{churchItem.slug}</td>
+                                                <td className="px-6 py-4 text-sm text-gray-500">{churchItem.slogan || '—'}</td>
+                                                <td className="px-6 py-4 text-right">
+                                                    <div className="flex items-center justify-end gap-2">
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="sm"
+                                                            onClick={() => {
+                                                                setEditingChurch(churchItem);
+                                                                setShowEditChurchModal(true);
+                                                            }}
+                                                            title="Editar"
+                                                        >
+                                                            <Edit className="h-4 w-4" />
+                                                        </Button>
+                                                        {churchItem.id !== currentChurch?.id && (
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="sm"
+                                                                onClick={() => {
+                                                                    setDeleteChurchId(churchItem.id);
+                                                                    setShowDeleteChurchModal(true);
+                                                                }}
+                                                                className="text-red-600 hover:text-red-700"
+                                                            >
+                                                                <Trash2 className="h-4 w-4" />
+                                                            </Button>
+                                                        )}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
+                    </CardBody>
+                </Card>
+            )}
+
             {activeTab === 'users' && (
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between">
@@ -827,6 +1016,101 @@ export default function SettingsPage() {
                 cancelText="Cancelar"
                 variant="danger"
                 loading={deleting}
+            />
+
+            {/* New Church Modal */}
+            <Modal
+                isOpen={showNewChurchModal}
+                onClose={() => setShowNewChurchModal(false)}
+                title="Nova Congregação"
+                size="sm"
+            >
+                <div className="space-y-4">
+                    <Input
+                        label="Nome da Congregação"
+                        value={newChurchName}
+                        onChange={e => {
+                            setNewChurchName(e.target.value);
+                            if (!slugManuallyEdited.current) {
+                                setNewChurchSlug(slugify(e.target.value));
+                            }
+                        }}
+                        placeholder="Ex: Congregação do Bairro X"
+                    />
+                    <Input
+                        label="Slug"
+                        value={newChurchSlug}
+                        onChange={e => {
+                            slugManuallyEdited.current = true;
+                            setNewChurchSlug(e.target.value);
+                        }}
+                        placeholder="congregacao-bairro-x"
+                        hint="Usado na URL da congregação"
+                    />
+                    <Input
+                        label="Slogan (opcional)"
+                        value={newChurchSlogan}
+                        onChange={e => setNewChurchSlogan(e.target.value)}
+                        placeholder="Uma igreja para todos"
+                    />
+                    <div className="flex justify-end gap-3 pt-2">
+                        <Button variant="secondary" onClick={() => setShowNewChurchModal(false)}>
+                            Cancelar
+                        </Button>
+                        <Button onClick={handleCreateChurch} loading={savingChurch} disabled={!newChurchName || !newChurchSlug}>
+                            <Plus className="h-4 w-4 mr-2" />
+                            Criar
+                        </Button>
+                    </div>
+                </div>
+            </Modal>
+
+            {/* Edit Church Modal */}
+            <Modal
+                isOpen={showEditChurchModal}
+                onClose={() => { setShowEditChurchModal(false); setEditingChurch(null); }}
+                title="Editar Congregação"
+                size="sm"
+            >
+                <div className="space-y-4">
+                    <Input
+                        label="Nome da Congregação"
+                        value={editingChurch?.name || ''}
+                        onChange={e => setEditingChurch(prev => prev ? { ...prev, name: e.target.value } : null)}
+                    />
+                    <Input
+                        label="Slug"
+                        value={editingChurch?.slug || ''}
+                        onChange={e => setEditingChurch(prev => prev ? { ...prev, slug: e.target.value } : null)}
+                    />
+                    <Input
+                        label="Slogan (opcional)"
+                        value={editingChurch?.slogan || ''}
+                        onChange={e => setEditingChurch(prev => prev ? { ...prev, slogan: e.target.value } : null)}
+                    />
+                    <div className="flex justify-end gap-3 pt-2">
+                        <Button variant="secondary" onClick={() => { setShowEditChurchModal(false); setEditingChurch(null); }}>
+                            Cancelar
+                        </Button>
+                        <Button onClick={handleEditChurch} loading={savingChurch}>
+                            <Save className="h-4 w-4 mr-2" />
+                            Salvar
+                        </Button>
+                    </div>
+                </div>
+            </Modal>
+
+            {/* Delete Church Confirm */}
+            <ConfirmDialog
+                isOpen={showDeleteChurchModal}
+                onClose={() => { setShowDeleteChurchModal(false); setDeleteChurchId(null); }}
+                onConfirm={handleDeleteChurch}
+                title="Remover Congregação"
+                message="Tem certeza que deseja remover esta congregação? Todas as campanhas e dados associados serão perdidos."
+                confirmText="Remover"
+                cancelText="Cancelar"
+                variant="danger"
+                loading={savingChurch}
             />
         </div>
     );
