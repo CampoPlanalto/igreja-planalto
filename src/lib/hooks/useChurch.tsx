@@ -2,6 +2,9 @@
 
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
 import { createClient } from '@/lib/supabase/client';
+import type { Database } from '@/types/database';
+
+type Json = Database['public']['Tables']['churches']['Row']['settings'];
 
 export interface Church {
   id: string;
@@ -18,7 +21,7 @@ export interface Church {
   website: string | null;
   whatsapp: string | null;
   social_links: Record<string, string>;
-  settings: Record<string, unknown>;
+  settings: Json;
   created_at: string;
   updated_at: string;
 }
